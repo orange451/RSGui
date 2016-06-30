@@ -17,21 +17,41 @@ public class RSGuiTextLabel extends RSGuiNode {
 		this.text = text;
 	}
 
+	/**
+	 * This function controls whether or not a dropshadow is drawn with the text.
+	 * @param sh
+	 * @return
+	 */
 	public RSGuiTextLabel setShadow( boolean sh ) {
 		this.shadow = sh;
 		return this;
 	}
 
+	/**
+	 * This function controls how the text is drawn. If it is centered, then the x position will be the center of the text.
+	 * @param center
+	 * @return
+	 */
 	public RSGuiTextLabel setCentered( boolean center ) {
 		this.center = center;
 		return this;
 	}
 
+	/**
+	 * This function sets the drawing color of the label.
+	 * @param c
+	 * @return
+	 */
 	public RSGuiTextLabel setColor( Color c ) {
 		this.color = c;
 		return this;
 	}
 
+	/**
+	 * This function controls the font used to draw the text.
+	 * @param bold
+	 * @return
+	 */
 	public RSGuiTextLabel setBold( boolean bold ) {
 		this.bold = bold;
 		return this;
@@ -55,10 +75,18 @@ public class RSGuiTextLabel extends RSGuiNode {
 		g.drawString(text, xx, y + 13);
 	}
 
+	/**
+	 * This function updates the text of this label.
+	 * @param choice
+	 */
 	public void setText(String choice) {
 		this.text = choice;
 	}
 
+	/**
+	 * This function returns the current text of the label.
+	 * @return
+	 */
 	public String getText() {
 		return this.text;
 	}

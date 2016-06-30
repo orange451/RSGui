@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
-	private ArrayList<RSGuiTextLabel> choices = new ArrayList<RSGuiTextLabel>();
+	private ArrayList<RSGuiNode> choices = new ArrayList<RSGuiNode>();
 	private String choice = "";
 	private boolean open;
 
@@ -16,7 +16,7 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 	private static final BufferedImage image2 = RSGuiFrame.BUTTON_DROPDOWN_2;
 
 	private BufferedImage i1;
-	private BufferedImage i2;
+	private RSGuiPanelScroll panel;
 
 	private RSGuiTextLabel cc;
 	private int mx;
@@ -29,19 +29,54 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 		cc.setShadow(true);
 
 		i1 = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
-		i2 = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
+
+		panel = new RSGuiPanelScroll( x, y, width, (height - 4) * 6 );
+		panel.add( new RSGuiOutline( Color.black,             0 ) );
+		panel.add( new RSGuiOutline( new Color(154, 106, 49), 1 ) );
+		panel.setScrollBarInset( 3 );
 	}
 
-	public void addChoice(String choice) {
-		RSGuiTextLabel c = new RSGuiTextLabel(0, 0, width - 6, height - 3, choice);
-		c.setShadow(true);
+	/**
+	 * This method ads a choice to the dropdown list.
+	 * @param choice
+	 * @return RSGuiTextButton representation of the choice.
+	 */
+	public RSGuiTextButton addChoice(String choice) {
+		final RSGuiTextButton b = new RSGuiTextButton( 3, 3, width - 20, height - 3, choice );
+		b.setColor( Color.white );
+		b.setSelectColor( Color.red );
+		b.addMouseListener( new RSGuiMouseListener() {
+			@Override public void onMouseDown(int x, int y) {}
 
-		this.choices.add(c);
+			@Override
+			public boolean onMousePress(int x, int y) {
+				RSGuiDropDown.this.choice = b.getText();
+				close();
+				return true;
+			}
+
+			@Override
+			public void onMouseUpdate(int x, int y) {
+
+			}
+
+		});
+
+		this.panel.add( b );
+		b.setLocation(b.x, b.y + choices.size() * b.getHeight() );
+
+		this.choices.add( b );
 		if (this.choice.equals("")) {
 			this.choice = choice;
 		}
+
+		return b;
 	}
 
+	/**
+	 * This method returns the current string choice selected by the user.
+	 * @return
+	 */
 	public String getCurrentChoice() {
 		return this.choice;
 	}
@@ -76,7 +111,8 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 		g.drawImage( i1, x, y, null );
 
 		// Draw the choices if we're open!
-		if ( open ) {
+		panel.setLocation(x, y + height - 1);
+		/*if ( open ) {
 			int h1 = (height - 2);
 			int hh = h1 * choices.size() + 5;
 			g.setColor(Color.black);
@@ -99,38 +135,39 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 				// Paint label
 				n.paint(g);
 			}
-		}
+		}*/
 	}
 
-	@Override
-	public Rectangle getBounds() {
-		if (!open)
-			return super.getBounds();
+	/**
+	 * This function opens the dropdown menu.
+	 */
+	public void open() {
+		((RSGuiPanel)parent).add(this.panel);
+		open = true;
+	}
 
-		return new Rectangle(x, y, width, height + (height - 2) * choices.size() );
+	/**
+	 * This function closes the dropdown menu.
+	 */
+	public void close() {
+		((RSGuiPanel)parent).remove(this.panel);
+		open = false;
 	}
 
 	@Override
 	public boolean onMousePress(int x, int y) {
-
-		// If the mouse is inside the box then handle opening it
-		if ( getBounds().contains(x, y) ) {
-			if ( open ) {
-				for (int i = 0; i < choices.size(); i++) {
-					if ( choices.get(i).getBounds().contains(x, y)) {
-						this.choice = choices.get(i).getText();
-					}
-				}
-			}
-			open = !open;
-			return true;
-		}
-
-		// If we're open, and clicked outside of box, then force close and disregard this click.
 		if ( open ) {
-			open = false;
-			return false;
+			if ( !panel.isMouseOver() ) {
+				this.close();
+				return true;
+			}
+		} else {
+			if ( getBounds().contains( x, y ) ) {
+				this.open();
+				return true;
+			}
 		}
+
 		return false;
 	}
 

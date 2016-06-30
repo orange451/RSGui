@@ -8,7 +8,7 @@ import scripts.gui.RSGuiDropDown;
 import scripts.gui.RSGuiFrame;
 import scripts.gui.RSGuiMouseListener;
 import scripts.gui.RSGuiPanel;
-import scripts.gui.RSGuiScrollPanel;
+import scripts.gui.RSGuiPanelScroll;
 import scripts.gui.RSGuiTextLabel;
 
 public class TestGui1 extends RSGuiFrame {
@@ -42,10 +42,10 @@ public class TestGui1 extends RSGuiFrame {
 
 
 		// Add a scrollable panel
-		RSGuiScrollPanel scroll = new RSGuiScrollPanel( 200, 0, 200, 200 );
+		RSGuiPanelScroll scroll = new RSGuiPanelScroll( 200, 0, 200, 200 );
 		scroll.add( new RSGuiTextLabel( 8, 8, 64, 16, "There's no text down there.").setShadow(true) );
 		scroll.add( new RSGuiTextLabel( 8, 24, 64, 16, "Don't look.").setShadow(true) );
-		scroll.add( new RSGuiTextLabel( 8, 1024, 64, 16, "SNEAKY TEXT! O:").setShadow(true) );
+		scroll.add( new RSGuiTextLabel( 8, 300, 64, 16, "SNEAKY TEXT! O:").setShadow(true) );
 		panel.add(scroll);
 
 
@@ -59,6 +59,7 @@ public class TestGui1 extends RSGuiFrame {
 		// Add a text button
 		final RSGuiButton button = new RSGuiButton( 0, 0, "Test Button!" );
 		button.setLocation( 4, panel.getHeight() - button.getHeight() - 4 );
+		button.setColor( Color.LIGHT_GRAY );
 		button.setSelectColor( Color.green );
 		button.addMouseListener( new RSGuiMouseListener() {
 			@Override public void onMouseDown(int x, int y) {}

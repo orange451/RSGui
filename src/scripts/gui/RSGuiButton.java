@@ -10,6 +10,7 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 	private BufferedImage buttonImage;
 	private String text;
 	private Color selectColor = Color.white;
+	private Color normalColor = Color.white;
 	private boolean hover = false;
 
 	public RSGuiButton( int x, int y, String text ) {
@@ -61,15 +62,30 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 		// Draw button text
 		g2.setColor(Color.BLACK);
 		g2.drawString(text, 7, height/2 + 7);
-		g2.setColor(hover?selectColor:Color.LIGHT_GRAY);
+		g2.setColor(hover?selectColor:normalColor);
 		g2.drawString(text, 6, height/2 + 6);
 
 		// Draw the image to the parent node
 		g.drawImage(buttonImage, x, y, null);
 	}
 
+	/**
+	 * This method sets the color the text will turn when hovered.
+	 * @param color
+	 * @return
+	 */
 	public RSGuiButton setSelectColor( Color color ) {
 		this.selectColor = color;
+		return this;
+	}
+
+	/**
+	 * This methods sets the normal drawing color for the text.
+	 * @param color
+	 * @return
+	 */
+	public RSGuiButton setColor( Color color ) {
+		this.normalColor = color;
 		return this;
 	}
 

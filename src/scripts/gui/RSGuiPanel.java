@@ -1,22 +1,32 @@
 package scripts.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 	protected ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
+	protected BufferedImage panelImage;
+	protected Color backgroundColor = RSGuiFrame.BACKGROUND_COLOR;
 
 	public RSGuiPanel( int x, int y, int width, int height ) {
 		super(x, y, width, height);
+
+		this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 	}
 
 	public void add( RSGuiNode node ) {
 		nodes.add( node );
-		node.setParent( parent );
+		node.setParent( this );
 	}
 
 	public void remove( RSGuiNode node ) {
 		nodes.remove( node );
+	}
+
+	public void setBackgroundColor( Color c ) {
+		this.backgroundColor = c;
 	}
 
 	@Override
@@ -55,12 +65,21 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	protected void paint(Graphics g) {
-		g.translate(x, y);
+
+		if ( width != panelImage.getWidth() || height != panelImage.getHeight() ) {
+			this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+		}
+
+		// Clear
+		Graphics g2 = panelImage.getGraphics();
+		g2.setColor( backgroundColor );
+		g2.fillRect(0, 0, panelImage.getWidth(), panelImage.getHeight());
+
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);
-			node.paint(g);
+			node.paint(this.panelImage.getGraphics());
 		}
-		g.translate(-x, -y);
+		g.drawImage(panelImage, x, y, null);
 	}
 
 }
