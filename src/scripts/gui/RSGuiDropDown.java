@@ -112,30 +112,6 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 
 		// Draw the choices if we're open!
 		panel.setLocation(x, y + height - 1);
-		/*if ( open ) {
-			int h1 = (height - 2);
-			int hh = h1 * choices.size() + 5;
-			g.setColor(Color.black);
-			g.fillRect(x, y+height-1, width, hh);
-			g.setColor( new Color(154, 106, 49) );
-			g.fillRect(x+1, y+height, width-2, hh-2);
-			g.setColor( new Color(84, 75, 64) );
-			g.fillRect(x+2, y+height+1, width-4, hh-4);
-
-			for (int i = 0; i < choices.size(); i++) {
-				RSGuiNode n = choices.get(i);
-				n.setLocation( x + 3, y + 2 + height + ( h1 * i ) );
-
-				Rectangle b = n.getBounds();
-				if ( b.contains(mx, my)) {
-					g.setColor( new Color(99,91,80) );
-					g.fillRect(b.x, b.y, b.width, b.height);
-				}
-
-				// Paint label
-				n.paint(g);
-			}
-		}*/
 	}
 
 	/**
