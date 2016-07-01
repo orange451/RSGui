@@ -13,12 +13,20 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 	public RSGuiPanel( int x, int y, int width, int height ) {
 		super(x, y, width, height);
 
-		this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+		this.panelImage = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
 	}
 
 	public void add( RSGuiNode node ) {
 		nodes.add( node );
 		node.setParent( this );
+
+		// If its a panel, and it does not have a defined size. Stretch it to my size!
+		if ( node instanceof RSGuiPanel ) {
+			if ( node.width == -1 )
+				node.width = width;
+			if ( node.height == -1 )
+				node.height = height;
+		}
 	}
 
 	public void remove( RSGuiNode node ) {
@@ -65,7 +73,6 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	protected void paint(Graphics g) {
-
 		if ( width != panelImage.getWidth() || height != panelImage.getHeight() ) {
 			this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 		}

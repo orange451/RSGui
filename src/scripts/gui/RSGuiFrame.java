@@ -49,6 +49,8 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	protected static final BufferedImage SCROLL_BAR_MID = getImage("scripts/gui/res/gui_scrollbar_2.png");
 	protected static final BufferedImage SCROLL_BAR_BOT = getImage("scripts/gui/res/gui_scrollbar_3.png");
 	protected static final BufferedImage SCROLL_BAR_BG  = getImage("scripts/gui/res/gui_scrollbar_4.png");
+	protected static final BufferedImage BUTTON_CHECK_1  = getImage("scripts/gui/res/checkbox1.png");
+	protected static final BufferedImage BUTTON_CHECK_2  = getImage("scripts/gui/res/checkbox2.png");
 
 	private ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
 	private boolean open;
@@ -61,12 +63,12 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	private BufferedImage iconImage;
 	private int ticks = 0;
 
-	public RSGuiFrame( String icon, String title, int width, int height ) {
-		super(0, 0, width, height );
+	public RSGuiFrame( String icon, String title ) {
+		super( 0, 0, 64, 64 );
 		this.center();
 
 		// Add close button
-		this.closeButton = new RSGuiImageButton( BUTTON_CLOSE1, BUTTON_CLOSE2 );
+		this.closeButton = new RSGuiImageButton( 0, 0, BUTTON_CLOSE1, BUTTON_CLOSE2 );
 		this.closeButton.addMouseListener( new RSGuiMouseListener() {
 			@Override public void onMouseUpdate(int x, int y) { }
 			@Override public void onMouseDown(int x, int y) { }
@@ -243,6 +245,14 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		// Add it to frame
 		nodes.add( node );
 		node.setParent( this );
+
+		// If its a panel, and it does not have a defined size. Stretch it to my size!
+		if ( node instanceof RSGuiPanel ) {
+			if ( node.width == -1 )
+				node.width = width;
+			if ( node.height == -1 )
+				node.height = height;
+		}
 	}
 
 	public void remove( RSGuiNode node ) {

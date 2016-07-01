@@ -3,12 +3,10 @@ package scripts.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	private String text;
-	private Color selectColor = Color.white;
+	private Color selectColor = Color.yellow;
 	private Color normalColor = Color.white;
 	private boolean hover = false;
 
@@ -21,10 +19,15 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	@Override
 	protected void paint(Graphics g) {
 		Font f = RSGuiFrame.FONT_REGULAR;
+		g.setFont(f);
+
+		if ( width == -1 )
+			width = g.getFontMetrics().stringWidth(text);
+		if ( height == -1 )
+			height = 16;
 
 		// Draw button text
 		g.setColor(Color.BLACK);
-		g.setFont(f);
 		g.drawString(text, x + 1, y + 14);
 		g.setColor(hover?selectColor:normalColor);
 		g.drawString(text, x, y + 13);
@@ -64,7 +67,7 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	public void onMouseUpdate(int x, int y) {
 		hover = getBounds().contains(x,y);
 
-		if ( x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height ) {
+		if ( hover ) {
 			for (int i = 0; i < listeners.size(); i++) {
 				listeners.get(i).onMouseUpdate(x, y);
 			}

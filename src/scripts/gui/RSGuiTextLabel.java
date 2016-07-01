@@ -62,6 +62,11 @@ public class RSGuiTextLabel extends RSGuiNode {
 		Font font = bold?RSGuiFrame.FONT_BOLD:RSGuiFrame.FONT_REGULAR;
 		g.setFont( font );
 
+		if ( width == -1 )
+			width = g.getFontMetrics().stringWidth(text);
+		if ( height == -1 )
+			height = 16;
+
 		int xx = x;
 		int wid = g.getFontMetrics().stringWidth(text);
 		if (center)

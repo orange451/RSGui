@@ -20,7 +20,7 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 		this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 
-		this.scrollUp = new RSGuiImageButton( RSGuiFrame.BUTTON_DROPDOWN_2, RSGuiFrame.BUTTON_DROPDOWN_2 );
+		this.scrollUp = new RSGuiImageButton( 0, 0, RSGuiFrame.BUTTON_DROPDOWN_2, RSGuiFrame.BUTTON_DROPDOWN_2 );
 		this.scrollUp.setLocation( width - this.scrollUp.getWidth() - 1, 1);
 		this.scrollUp.addMouseListener( new RSGuiMouseListener() {
 			@Override public void onMouseUpdate(int x, int y) { }
@@ -34,7 +34,7 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 		});
 		this.nodes.add( this.scrollUp );
 
-		this.scrollDown = new RSGuiImageButton( RSGuiFrame.BUTTON_DROPDOWN_1, RSGuiFrame.BUTTON_DROPDOWN_1 );
+		this.scrollDown = new RSGuiImageButton( 0, 0, RSGuiFrame.BUTTON_DROPDOWN_1, RSGuiFrame.BUTTON_DROPDOWN_1 );
 		this.scrollDown.setLocation( width - this.scrollUp.getWidth() - 1, height - this.scrollDown.getHeight() - 1 );
 		this.scrollDown.addMouseListener( new RSGuiMouseListener() {
 			@Override public void onMouseUpdate(int x, int y) { }
@@ -119,7 +119,6 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 	@Override
 	protected void paint(Graphics g) {
-
 		// Re-create the scrollable image if it's too small.
 		RECALCULATE_PANEL_IMAGE();
 		Graphics g2 = panelImage.getGraphics();
@@ -158,6 +157,11 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 	}
 
 	private void RECALCULATE_PANEL_IMAGE() {
+		int ph = parent.getHeight();
+		if ( y + height > ph ) {
+			height = ph - y;
+		}
+
 		int hh = height;
 		for (int i = nodes.size() - 1; i >= 0; i-- ) {
 			RSGuiNode node = nodes.get(i);

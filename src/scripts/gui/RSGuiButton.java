@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 	private BufferedImage buttonImage;
 	private String text;
-	private Color selectColor = Color.white;
+	private Color selectColor = Color.yellow;
 	private Color normalColor = Color.white;
 	private boolean hover = false;
 
-	public RSGuiButton( int x, int y, String text ) {
-		super( x, y, 1, 1 );
+	public RSGuiButton( String text ) {
+		super( 0, 0, 1, 1 );
 
 		this.text = text;
 

@@ -14,7 +14,7 @@ import scripts.gui.RSGuiTextLabel;
 public class TestGui1 extends RSGuiFrame {
 
 	public TestGui1(String icon) {
-		super( icon, "This is a test GUI!!!", 64, 64 );
+		super( icon, "This is a test GUI!!!" );
 
 		// Create a new panel. Put all child nodes inside this.
 		RSGuiPanel panel = new RSGuiPanel( 0, 0, 400, 200 );
@@ -57,7 +57,7 @@ public class TestGui1 extends RSGuiFrame {
 
 
 		// Add a text button
-		final RSGuiButton button = new RSGuiButton( 0, 0, "Test Button!" );
+		final RSGuiButton button = new RSGuiButton( "Test Button!" );
 		button.setLocation( 4, panel.getHeight() - button.getHeight() - 4 );
 		button.setColor( Color.LIGHT_GRAY );
 		button.setSelectColor( Color.green );

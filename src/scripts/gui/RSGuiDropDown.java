@@ -30,7 +30,7 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 
 		i1 = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
 
-		panel = new RSGuiPanelScroll( x, y, width, (height - 4) * 6 );
+		panel = new RSGuiPanelScroll( x, y, width, (height - 4) * 10 );
 		panel.add( new RSGuiOutline( Color.black,             0 ) );
 		panel.add( new RSGuiOutline( new Color(154, 106, 49), 1 ) );
 		panel.setScrollBarInset( 3 );
