@@ -9,7 +9,8 @@ public class RSGuiBox extends RSGuiPanel {
 	protected int padding = 0;
 
 	public RSGuiBox( int x, int y, int width, int height ) {
-		super(x, y, width, height);
+		super(width, height);
+		this.setLocation(x, y);
 
 		this.actualWidth  = width;
 		this.actualHeight = height;

@@ -25,12 +25,12 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 	public RSGuiDropDown( int x, int y, int width ) {
 		super( x, y, width, image1.getHeight() + 6 );
 
-		cc = new RSGuiTextLabel( 3, 4, width, height, "" );
+		cc = new RSGuiTextLabel( 3, 4, 64, height, "" );
 		cc.setShadow(true);
 
-		i1 = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
+		i1 = new BufferedImage( 64, 64, BufferedImage.TYPE_INT_ARGB );
 
-		panel = new RSGuiPanelScroll( x, y, width, (height - 4) * 10 );
+		panel = new RSGuiPanelScroll( x, y, 64, 64 );
 		panel.add( new RSGuiOutline( Color.black,             0 ) );
 		panel.add( new RSGuiOutline( new Color(154, 106, 49), 1 ) );
 		panel.setScrollBarInset( 3 );
@@ -83,6 +83,8 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	protected void paint(Graphics g) {
+		panel.setSize(width, (height - 4) * 10);
+
 		// Check if we need to re-create our images
 		if ( i1.getWidth() != width || i1.getHeight() != height ) {
 			i1 = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
@@ -112,6 +114,30 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 
 		// Draw the choices if we're open!
 		panel.setLocation(x, y + height - 1);
+		/*if ( open ) {
+			int h1 = (height - 2);
+			int hh = h1 * choices.size() + 5;
+			g.setColor(Color.black);
+			g.fillRect(x, y+height-1, width, hh);
+			g.setColor( new Color(154, 106, 49) );
+			g.fillRect(x+1, y+height, width-2, hh-2);
+			g.setColor( new Color(84, 75, 64) );
+			g.fillRect(x+2, y+height+1, width-4, hh-4);
+
+			for (int i = 0; i < choices.size(); i++) {
+				RSGuiNode n = choices.get(i);
+				n.setLocation( x + 3, y + 2 + height + ( h1 * i ) );
+
+				Rectangle b = n.getBounds();
+				if ( b.contains(mx, my)) {
+					g.setColor( new Color(99,91,80) );
+					g.fillRect(b.x, b.y, b.width, b.height);
+				}
+
+				// Paint label
+				n.paint(g);
+			}
+		}*/
 	}
 
 	/**

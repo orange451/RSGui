@@ -18,9 +18,11 @@ import javax.imageio.ImageIO;
 import org.tribot.api2007.Game;
 import org.tribot.script.interfaces.EventBlockingOverride;
 
+import scripts.gui.font.RSFont;
+
 public abstract class RSGuiFrame extends RSGuiNode {
-	protected static final Font FONT_BOLD    = getFont("textBold.ttf");
-	protected static final Font FONT_REGULAR = getFont("textRegular.ttf");
+	public static final RSFont FONT_BOLD    = new RSFont( getFont("textBold.ttf") );
+	public static final RSFont FONT_REGULAR = new RSFont( getFont("textRegular.ttf") );
 	protected static final Color BACKGROUND_COLOR = new Color( 73, 64, 52 );
 	protected static final BufferedImage BORDER_LEFT   = getImage("scripts/gui/res/spr_window_border_7.png");
 	protected static final BufferedImage BORDER_RIGHT  = getImage("scripts/gui/res/spr_window_border_3.png");

@@ -10,8 +10,8 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 	protected BufferedImage panelImage;
 	protected Color backgroundColor = RSGuiFrame.BACKGROUND_COLOR;
 
-	public RSGuiPanel( int x, int y, int width, int height ) {
-		super(x, y, width, height);
+	public RSGuiPanel( int width, int height ) {
+		super( 0, 0, width, height);
 
 		this.panelImage = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
 	}
@@ -23,9 +23,9 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 		// If its a panel, and it does not have a defined size. Stretch it to my size!
 		if ( node instanceof RSGuiPanel ) {
 			if ( node.width == -1 )
-				node.width = width;
+				node.width = getWidth();
 			if ( node.height == -1 )
-				node.height = height;
+				node.height = getHeight();
 		}
 	}
 

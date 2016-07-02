@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import scripts.gui.font.RSFont;
+
 public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	private String text;
 	private Color selectColor = Color.yellow;
@@ -18,8 +20,8 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	protected void paint(Graphics g) {
-		Font f = RSGuiFrame.FONT_REGULAR;
-		g.setFont(f);
+		RSFont f = RSGuiFrame.FONT_REGULAR;
+		g.setFont(f.getFont());
 
 		if ( width == -1 )
 			width = g.getFontMetrics().stringWidth(text);

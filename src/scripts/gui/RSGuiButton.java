@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import scripts.gui.font.RSFont;
+
 public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 	private BufferedImage buttonImage;
 	private String text;
@@ -24,10 +26,7 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 	}
 
 	private void GENERATE_BUTTON() {
-		Graphics g = buttonImage.getGraphics();
-		Font f = RSGuiFrame.FONT_REGULAR;
-		g.setFont(f);
-		int stringWid = g.getFontMetrics().stringWidth(text);
+		int stringWid = RSGuiFrame.FONT_REGULAR.getWidth(text);
 		width = stringWid + 12;
 		height = 30;
 
@@ -38,7 +37,7 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	protected void paint(Graphics g) {
-		Font f = RSGuiFrame.FONT_REGULAR;
+		RSFont f = RSGuiFrame.FONT_REGULAR;
 		GENERATE_BUTTON();
 
 		// Get the graphics for the button image
@@ -46,7 +45,7 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 		g2.setColor( new Color( 78, 69, 58 ) );
 		g2.fillRect( 3, 3, width - 6, height - 6 );
 
-		g2.setFont( f );
+		g2.setFont( f.getFont() );
 		int tw = RSGuiFrame.BUTTON_NORMAL_1.getWidth();
 		int th = RSGuiFrame.BUTTON_NORMAL_1.getHeight();
 		g2.drawImage( RSGuiFrame.BUTTON_NORMAL_1, 0, 0, null );
@@ -118,5 +117,13 @@ public class RSGuiButton extends RSGuiNode implements RSGuiMouseListener {
 				listeners.get(i).onMouseUpdate(x, y);
 			}
 		}
+	}
+
+	public String getText() {
+		return this.text;
+	}
+
+	public void setText(String string) {
+		this.text = string;
 	}
 }

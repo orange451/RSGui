@@ -17,7 +17,7 @@ public class TestGui1 extends RSGuiFrame {
 		super( icon, "This is a test GUI!!!" );
 
 		// Create a new panel. Put all child nodes inside this.
-		RSGuiPanel panel = new RSGuiPanel( 0, 0, 400, 200 );
+		RSGuiPanel panel = new RSGuiPanel( 400, 200 );
 		this.add(panel);
 
 		// Create a test label

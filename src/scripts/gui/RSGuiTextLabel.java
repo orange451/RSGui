@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import scripts.gui.font.ChatColor;
+import scripts.gui.font.RSFont;
+
 public class RSGuiTextLabel extends RSGuiNode {
 	private String text;
 	private boolean bold;
@@ -59,25 +62,25 @@ public class RSGuiTextLabel extends RSGuiNode {
 
 	@Override
 	protected void paint(Graphics g) {
-		Font font = bold?RSGuiFrame.FONT_BOLD:RSGuiFrame.FONT_REGULAR;
-		g.setFont( font );
+		RSFont font = bold?RSGuiFrame.FONT_BOLD:RSGuiFrame.FONT_REGULAR;
+
+		int strWid = font.getWidth(text);
 
 		if ( width == -1 )
-			width = g.getFontMetrics().stringWidth(text);
+			width = strWid;
 		if ( height == -1 )
 			height = 16;
 
 		int xx = x;
-		int wid = g.getFontMetrics().stringWidth(text);
 		if (center)
-			xx -= wid/2;
+			xx -= strWid/2;
 
 		if ( shadow ) {
-			g.setColor(Color.black);
-			g.drawString(text, xx+1, y+14);
+			font.drawStringShadow( g, text, xx, y );
+		} else {
+			g.setColor( color );
+			font.drawString( g, text, xx, y + 13 );
 		}
-		g.setColor( color );
-		g.drawString(text, xx, y + 13);
 	}
 
 	/**

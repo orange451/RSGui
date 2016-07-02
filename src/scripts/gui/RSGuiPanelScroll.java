@@ -16,9 +16,10 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 	private boolean hover;
 
 	public RSGuiPanelScroll(int x, int y, int width, int height) {
-		super(x, y, width, height);
+		super(width, height);
+		this.setLocation(x, y);
 
-		this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+		this.panelImage = new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB );
 
 		this.scrollUp = new RSGuiImageButton( 0, 0, RSGuiFrame.BUTTON_DROPDOWN_2, RSGuiFrame.BUTTON_DROPDOWN_2 );
 		this.scrollUp.setLocation( width - this.scrollUp.getWidth() - 1, 1);
