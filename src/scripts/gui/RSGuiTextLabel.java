@@ -75,10 +75,10 @@ public class RSGuiTextLabel extends RSGuiNode {
 		if (center)
 			xx -= strWid/2;
 
+		g.setColor( color );
 		if ( shadow ) {
-			font.drawStringShadow( g, text, xx, y );
+			font.drawStringShadow( g, text, xx, y + 13 );
 		} else {
-			g.setColor( color );
 			font.drawString( g, text, xx, y + 13 );
 		}
 	}
