@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import scripts.gui.RSGuiButton;
+import scripts.gui.RSGuiCheckbox;
 import scripts.gui.RSGuiDropDown;
 import scripts.gui.RSGuiFrame;
 import scripts.gui.RSGuiMouseListener;
+import scripts.gui.RSGuiOutline;
 import scripts.gui.RSGuiPanel;
 import scripts.gui.RSGuiPanelScroll;
 import scripts.gui.RSGuiTextLabel;
@@ -43,6 +45,7 @@ public class TestGui1 extends RSGuiFrame {
 
 		// Add a scrollable panel
 		RSGuiPanelScroll scroll = new RSGuiPanelScroll( 200, 0, 200, 200 );
+		scroll.setScrollBarInset(2);
 		scroll.add( new RSGuiTextLabel( 8, 8, 64, 16, "There's no text down there.").setShadow(true) );
 		scroll.add( new RSGuiTextLabel( 8, 24, 64, 16, "Don't look.").setShadow(true) );
 		scroll.add( new RSGuiTextLabel( 8, 300, 64, 16, "SNEAKY TEXT! O:").setShadow(true) );
@@ -54,6 +57,10 @@ public class TestGui1 extends RSGuiFrame {
 		label3.setShadow(true);
 		label3.setColor( Color.red );
 		panel.add(label3);
+
+
+		RSGuiCheckbox checkbox = new RSGuiCheckbox(2, 96, "This is a checkbox!");
+		panel.add(checkbox);
 
 
 		// Add a text button
