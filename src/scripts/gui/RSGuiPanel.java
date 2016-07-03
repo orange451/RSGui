@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 	protected ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
 	protected BufferedImage panelImage;
-	protected Color backgroundColor = RSGuiFrame.BACKGROUND_COLOR;
+	protected Color backgroundColor = null;//RSGuiFrame.BACKGROUND_COLOR;
 
 	public RSGuiPanel( int width, int height ) {
 		super( 0, 0, width, height);
@@ -77,16 +77,22 @@ public class RSGuiPanel extends RSGuiNode implements RSGuiMouseListener {
 			this.panelImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 		}
 
-		// Clear
-		Graphics g2 = panelImage.getGraphics();
-		g2.setColor( backgroundColor );
-		g2.fillRect(0, 0, panelImage.getWidth(), panelImage.getHeight());
-
+		clear();
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);
 			node.paint(this.panelImage.getGraphics());
 		}
 		g.drawImage(panelImage, x, y, null);
+	}
+
+	public void clear() {
+		AwtUtil.clearImage(panelImage);
+		// Clear
+		Graphics g2 = panelImage.getGraphics();
+		if ( backgroundColor != null ) {
+			g2.setColor( backgroundColor );
+			g2.fillRect(0, 0, panelImage.getWidth(), panelImage.getHeight());
+		}
 	}
 
 }

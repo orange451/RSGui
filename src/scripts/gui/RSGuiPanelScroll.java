@@ -15,6 +15,10 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 	private Rectangle scrollBoundsBar = new Rectangle();
 	private boolean hover;
 
+	private boolean mouseDown = false;
+	private int mx;
+	private int my;
+
 	public RSGuiPanelScroll(int x, int y, int width, int height) {
 		super(width, height);
 		this.setLocation(x, y);
@@ -51,39 +55,41 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 	}
 
 	private int sOffset = 0;
-	private boolean mouseDown = false;
-	private void DO_SCROLLBAR( boolean firstClick, int xx, int yy ) {
+	private boolean scrollMouseDown = false;
+	private void DO_SCROLLBAR( int xx, int yy ) {
 		boolean clickedBar = scrollBoundsBar.contains(xx, yy);
 
-		if ( !scrollBounds.contains(xx, yy) && !mouseDown )
+		if ( !scrollBounds.contains(xx, yy) && !scrollMouseDown )
 			return;
 
-		if ( !clickedBar && !mouseDown ) {
+		if ( !clickedBar && !scrollMouseDown ) {
 			int diff = yy - scrollBounds.y;
 			scrollY = (int) ((diff / (float)scrollBounds.height) * panelImage.getHeight());
 		} else {
-			if ( firstClick )
+			if ( !scrollMouseDown )
 				sOffset = yy - scrollBoundsBar.y;
-			else
-				mouseDown = true;
+
+			scrollMouseDown = true;
 
 			int diff = yy - scrollBounds.y - sOffset;
 			scrollY = (int) ((diff / (float)scrollBounds.height) * panelImage.getHeight());
 		}
+
 		scrollY = Math.min( Math.max(0, scrollY), panelImage.getHeight() - height );
+		mouseDown = false;
 	}
 
 	@Override
 	public boolean onMousePress(int x, int y) {
-		mouseDown = false;
-		int xx = x - this.x;
-		int yy = y - this.y + scrollY;
-		DO_SCROLLBAR( true, xx, yy );
+		scrollMouseDown = false;
+		mx = x - this.x;
+		my = y - this.y;
+		DO_SCROLLBAR( mx, my + scrollY );
 
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
 			if ( node instanceof RSGuiMouseListener ) {
-				boolean ret = ((RSGuiMouseListener)node).onMousePress(xx, yy);
+				boolean ret = ((RSGuiMouseListener)node).onMousePress(mx, my + scrollY);
 				if ( ret ) {
 					return true;
 				}
@@ -106,14 +112,14 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 	@Override
 	public void onMouseDown(int x, int y) {
-		int xx = x - this.x;
-		int yy = y - this.y + scrollY;
-		DO_SCROLLBAR( false, xx, yy );
+		mouseDown = true;
+		mx = x - this.x;
+		my = y - this.y;// + scrollY;
 
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
 			if ( node instanceof RSGuiMouseListener ) {
-				((RSGuiMouseListener)node).onMouseDown(xx, yy);
+				((RSGuiMouseListener)node).onMouseDown(mx, my + scrollY);
 			}
 		}
 	}
@@ -122,9 +128,9 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 	protected void paint(Graphics g) {
 		// Re-create the scrollable image if it's too small.
 		RECALCULATE_PANEL_IMAGE();
+		clear();
+
 		Graphics g2 = panelImage.getGraphics();
-		g2.setColor( backgroundColor );
-		g2.fillRect(0, 0, panelImage.getWidth(), panelImage.getHeight());
 		g2.setColor( Color.white );
 
 		// Paint all elements to me
@@ -175,6 +181,9 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 			this.panelImage = new BufferedImage( width, hh, BufferedImage.TYPE_INT_ARGB );
 		}
 
+		if ( mouseDown ) {
+			DO_SCROLLBAR( mx, my + scrollY );
+		}
 		scrollY = Math.min( Math.max(0, scrollY), panelImage.getHeight() - height );
 	}
 

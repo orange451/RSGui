@@ -71,11 +71,7 @@ public class RSGuiBox extends RSGuiPanel {
 		if ( actualWidth != panelImage.getWidth() || actualHeight != panelImage.getHeight() ) {
 			this.panelImage = new BufferedImage( actualWidth, actualHeight, BufferedImage.TYPE_INT_ARGB );
 		}
-
-		// Clear
-		Graphics g2 = panelImage.getGraphics();
-		g2.setColor( backgroundColor );
-		g2.fillRect(0, 0, panelImage.getWidth(), panelImage.getHeight());
+		this.clear();
 
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);

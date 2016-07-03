@@ -1,8 +1,10 @@
 package scripts.gui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -21,38 +23,38 @@ import org.tribot.script.interfaces.EventBlockingOverride;
 import scripts.gui.font.RSFont;
 
 public abstract class RSGuiFrame extends RSGuiNode {
-	public static final RSFont FONT_BOLD    = new RSFont( getFont("textBold.ttf") );
-	public static final RSFont FONT_REGULAR = new RSFont( getFont("textRegular.ttf") );
+	public static final RSFont FONT_BOLD    = new RSFont( AwtUtil.getFont("textBold.ttf") );
+	public static final RSFont FONT_REGULAR = new RSFont( AwtUtil.getFont("textRegular.ttf") );
 	protected static final Color BACKGROUND_COLOR = new Color( 73, 64, 52 );
-	protected static final BufferedImage BORDER_LEFT   = getImage("scripts/gui/res/spr_window_border_7.png");
-	protected static final BufferedImage BORDER_RIGHT  = getImage("scripts/gui/res/spr_window_border_3.png");
-	protected static final BufferedImage BORDER_TOP    = getImage("scripts/gui/res/spr_window_border_1.png");
-	protected static final BufferedImage BORDER_BOTTOM = getImage("scripts/gui/res/spr_window_border_5.png");
-	protected static final BufferedImage BORDER_TOP_LEFT     = getImage("scripts/gui/res/spr_window_border_0.png");
-	protected static final BufferedImage BORDER_TOP_RIGHT    = getImage("scripts/gui/res/spr_window_border_2.png");
-	protected static final BufferedImage BORDER_BOTTOM_RIGHT = getImage("scripts/gui/res/spr_window_border_4.png");
-	protected static final BufferedImage BORDER_BOTTOM_LEFT  = getImage("scripts/gui/res/spr_window_border_6.png");
-	protected static final BufferedImage BUTTON_CLOSE1 = getImage("scripts/gui/res/spr_button_close_0.png");
-	protected static final BufferedImage BUTTON_CLOSE2 = getImage("scripts/gui/res/spr_button_close_1.png");
-	protected static final BufferedImage BUTTON_GUI_NORMAL = getImage("scripts/gui/res/button1.png");
-	protected static final BufferedImage BUTTON_GUI_OPEN   = getImage("scripts/gui/res/button2.png");
-	protected static final BufferedImage BUTTON_GUI_NOTIFY = getImage("scripts/gui/res/button3.png");
-	protected static final BufferedImage BUTTON_DROPDOWN_1 = getImage("scripts/gui/res/dropdown1.png");
-	protected static final BufferedImage BUTTON_DROPDOWN_2 = getImage("scripts/gui/res/dropdown2.png");
-	protected static final BufferedImage BUTTON_NORMAL_1 = getImage("scripts/gui/res/spr_button_n_c1.png");
-	protected static final BufferedImage BUTTON_NORMAL_2 = getImage("scripts/gui/res/spr_button_n_c2.png");
-	protected static final BufferedImage BUTTON_NORMAL_3 = getImage("scripts/gui/res/spr_button_n_c3.png");
-	protected static final BufferedImage BUTTON_NORMAL_4 = getImage("scripts/gui/res/spr_button_n_c4.png");
-	protected static final BufferedImage BUTTON_NORMAL_5 = getImage("scripts/gui/res/spr_button_n_c5.png");
-	protected static final BufferedImage BUTTON_NORMAL_6 = getImage("scripts/gui/res/spr_button_n_c6.png");
-	protected static final BufferedImage BUTTON_NORMAL_7 = getImage("scripts/gui/res/spr_button_n_c7.png");
-	protected static final BufferedImage BUTTON_NORMAL_8 = getImage("scripts/gui/res/spr_button_n_c8.png");
-	protected static final BufferedImage SCROLL_BAR_TOP = getImage("scripts/gui/res/gui_scrollbar_1.png");
-	protected static final BufferedImage SCROLL_BAR_MID = getImage("scripts/gui/res/gui_scrollbar_2.png");
-	protected static final BufferedImage SCROLL_BAR_BOT = getImage("scripts/gui/res/gui_scrollbar_3.png");
-	protected static final BufferedImage SCROLL_BAR_BG  = getImage("scripts/gui/res/gui_scrollbar_4.png");
-	protected static final BufferedImage BUTTON_CHECK_1  = getImage("scripts/gui/res/checkbox1.png");
-	protected static final BufferedImage BUTTON_CHECK_2  = getImage("scripts/gui/res/checkbox2.png");
+	protected static final BufferedImage BORDER_LEFT   = AwtUtil.getImage("scripts/gui/res/spr_window_border_7.png");
+	protected static final BufferedImage BORDER_RIGHT  = AwtUtil.getImage("scripts/gui/res/spr_window_border_3.png");
+	protected static final BufferedImage BORDER_TOP    = AwtUtil.getImage("scripts/gui/res/spr_window_border_1.png");
+	protected static final BufferedImage BORDER_BOTTOM = AwtUtil.getImage("scripts/gui/res/spr_window_border_5.png");
+	protected static final BufferedImage BORDER_TOP_LEFT     = AwtUtil.getImage("scripts/gui/res/spr_window_border_0.png");
+	protected static final BufferedImage BORDER_TOP_RIGHT    = AwtUtil.getImage("scripts/gui/res/spr_window_border_2.png");
+	protected static final BufferedImage BORDER_BOTTOM_RIGHT = AwtUtil.getImage("scripts/gui/res/spr_window_border_4.png");
+	protected static final BufferedImage BORDER_BOTTOM_LEFT  = AwtUtil.getImage("scripts/gui/res/spr_window_border_6.png");
+	protected static final BufferedImage BUTTON_CLOSE1 = AwtUtil.getImage("scripts/gui/res/spr_button_close_0.png");
+	protected static final BufferedImage BUTTON_CLOSE2 = AwtUtil.getImage("scripts/gui/res/spr_button_close_1.png");
+	protected static final BufferedImage BUTTON_GUI_NORMAL = AwtUtil.getImage("scripts/gui/res/button1.png");
+	protected static final BufferedImage BUTTON_GUI_OPEN   = AwtUtil.getImage("scripts/gui/res/button2.png");
+	protected static final BufferedImage BUTTON_GUI_NOTIFY = AwtUtil.getImage("scripts/gui/res/button3.png");
+	protected static final BufferedImage BUTTON_DROPDOWN_1 = AwtUtil.getImage("scripts/gui/res/dropdown1.png");
+	protected static final BufferedImage BUTTON_DROPDOWN_2 = AwtUtil.getImage("scripts/gui/res/dropdown2.png");
+	protected static final BufferedImage BUTTON_NORMAL_1 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c1.png");
+	protected static final BufferedImage BUTTON_NORMAL_2 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c2.png");
+	protected static final BufferedImage BUTTON_NORMAL_3 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c3.png");
+	protected static final BufferedImage BUTTON_NORMAL_4 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c4.png");
+	protected static final BufferedImage BUTTON_NORMAL_5 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c5.png");
+	protected static final BufferedImage BUTTON_NORMAL_6 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c6.png");
+	protected static final BufferedImage BUTTON_NORMAL_7 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c7.png");
+	protected static final BufferedImage BUTTON_NORMAL_8 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c8.png");
+	protected static final BufferedImage SCROLL_BAR_TOP = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_1.png");
+	protected static final BufferedImage SCROLL_BAR_MID = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_2.png");
+	protected static final BufferedImage SCROLL_BAR_BOT = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_3.png");
+	protected static final BufferedImage SCROLL_BAR_BG  = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_4.png");
+	protected static final BufferedImage BUTTON_CHECK_1  = AwtUtil.getImage("scripts/gui/res/checkbox1.png");
+	protected static final BufferedImage BUTTON_CHECK_2  = AwtUtil.getImage("scripts/gui/res/checkbox2.png");
 
 	private ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
 	private boolean open;
@@ -93,7 +95,7 @@ public abstract class RSGuiFrame extends RSGuiNode {
 
 		// Load icon
 		if ( icon != null )
-			this.iconImage = getImage(icon);
+			this.iconImage = AwtUtil.getImage(icon);
 	}
 
 	/**
@@ -209,12 +211,13 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		notify = false;
 
 		// Draw to frame
+		AwtUtil.clearImage(frameImage);
 		Graphics g = frameImage.getGraphics();
 
 		// Draw background
 		Color col = new Color( BACKGROUND_COLOR.getRed() / 255f, BACKGROUND_COLOR.getGreen() / 255f, BACKGROUND_COLOR.getBlue() / 255f, opacity );
 		g.setColor( col );
-		g.fillRect(0, 0, width, height);
+		g.fillRect(0, 0, width, height );
 
 		// Draw the border
 		drawBorder( g );
@@ -335,29 +338,5 @@ public abstract class RSGuiFrame extends RSGuiNode {
 
 		// Otherwise, send the event to the game!
 		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
-	}
-
-	private static BufferedImage getImage( String name ) {
-		try {
-			return ImageIO.read(RSGuiFrame.class.getClassLoader().getResource(name));
-		} catch (IOException e) {
-			//
-		}
-		return null;
-	}
-	private static Font getFont(String name) {
-		Font font = null;
-		String fName = "scripts/gui/res/" + name;
-
-		try {
-			URL url   = RSGuiFrame.class.getClassLoader().getResource("scripts/gui/res/" + name);
-			font = Font.createFont(Font.TRUETYPE_FONT, url.openStream());
-			font = font.deriveFont( Font.PLAIN, 16 );
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.err.println(fName + " not loaded.  Using serif font.");
-			font = new Font("serif", Font.PLAIN, 16);
-		}
-		return font;
 	}
 }

@@ -34,6 +34,8 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 		panel.add( new RSGuiOutline( Color.black,             0 ) );
 		panel.add( new RSGuiOutline( new Color(154, 106, 49), 1 ) );
 		panel.setScrollBarInset( 3 );
+
+		panel.setBackgroundColor( RSGuiFrame.BACKGROUND_COLOR );
 	}
 
 	/**
@@ -144,8 +146,10 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 	 * This function opens the dropdown menu.
 	 */
 	public void open() {
-		((RSGuiPanel)parent).add(this.panel);
-		open = true;
+		if ( !open ) {
+			((RSGuiPanel)parent).add(this.panel);
+			open = true;
+		}
 	}
 
 	/**
