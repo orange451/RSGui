@@ -27,9 +27,11 @@ public class RSFont {
 
 	public void drawString(Graphics g, String text, int x, int y) {
 		g.translate(x, y);
+		g.setFont(font);
+		Color col = g.getColor();
+
 		int chars = text.length();
 		int offset = 0;
-		Color col = g.getColor();
 		for (int i = 0; i < chars; i++) {
 			char c = text.charAt(i);
 			if ( c == ChatColor.COLOR_CODE.charAt(0) && i < chars - 1 ) {
