@@ -49,6 +49,13 @@ public class RSGui {
 	}
 
 	/**
+	 * Closes the bot panel.
+	 */
+	public void close() {
+		this.open = false;
+	}
+
+	/**
 	 * Sets the notify state of the Gui.
 	 */
 	public void setNotification( boolean notify ) {
