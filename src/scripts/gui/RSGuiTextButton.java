@@ -10,7 +10,7 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	private String text;
 	private Color selectColor = Color.yellow;
 	private Color normalColor = Color.white;
-	private boolean hover = false;
+	protected boolean hover = false;
 
 	public RSGuiTextButton( int x, int y, int width, int height, String text ) {
 		super( x, y, width, height );

@@ -15,9 +15,13 @@ public class RSGuiTextLabel extends RSGuiNode {
 	private boolean shadow;
 	private boolean center;
 
-	public RSGuiTextLabel( int x, int y, int width, int height, String text ) {
-		super( x, y, width, height );
+	public RSGuiTextLabel( int x, int y, String text ) {
+		super( x, y, 0, 0 );
 		this.text = text;
+
+		RSFont font = bold?RSGuiFrame.FONT_BOLD:RSGuiFrame.FONT_REGULAR;
+		width = font.getWidth(text);
+		height = font.getHeight();
 	}
 
 	/**

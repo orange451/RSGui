@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class AwtUtil {
-	private static ArrayList<BufferedImage> clearImages = new ArrayList<BufferedImage>();
-
 	public static BufferedImage getImage( String name ) {
 		try {
 			return ImageIO.read(RSGuiFrame.class.getClassLoader().getResource(name));
@@ -27,7 +25,7 @@ public class AwtUtil {
 		String fName = "scripts/gui/res/" + name;
 
 		try {
-			URL url   = RSGuiFrame.class.getClassLoader().getResource("scripts/gui/res/" + name);
+			URL url = RSGuiFrame.class.getClassLoader().getResource("scripts/gui/res/" + name);
 			font = Font.createFont(Font.TRUETYPE_FONT, url.openStream());
 			font = font.deriveFont( Font.PLAIN, 16 );
 		} catch (Exception ex) {

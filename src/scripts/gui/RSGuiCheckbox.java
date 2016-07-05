@@ -22,7 +22,7 @@ public class RSGuiCheckbox extends RSGuiNode implements RSGuiMouseListener {
 	protected void paint(Graphics g) {
 		// UPdate locations of inner nodes
 		this.button.setLocation(x, y);
-		this.text.setLocation(x + this.button.getWidth() + 2, y + 1);
+		this.text.setLocation(x + this.button.getWidth() + 4, y + 1);
 
 		// Update checked icon
 		BufferedImage img = checked?BUTTON_CHECK:BUTTON_NONE;
@@ -33,7 +33,7 @@ public class RSGuiCheckbox extends RSGuiNode implements RSGuiMouseListener {
 		this.text.paint(g);
 
 		// Update my width
-		this.width = text.x + text.getWidth() - x;
+		this.width = text.x + 4 + text.getWidth() - x;
 		this.height = this.button.getHeight();
 	}
 
@@ -66,6 +66,10 @@ public class RSGuiCheckbox extends RSGuiNode implements RSGuiMouseListener {
 			for (int i = 0; i < listeners.size(); i++) {
 				listeners.get(i).onMouseDown(x, y);
 			}
+
+			// Update checked icon
+			BufferedImage img = checked?BUTTON_CHECK:BUTTON_NONE;
+			this.button.setImages( img, img );
 			return true;
 		}
 
@@ -76,6 +80,8 @@ public class RSGuiCheckbox extends RSGuiNode implements RSGuiMouseListener {
 	public void onMouseUpdate(int x, int y) {
 		this.button.onMouseUpdate(x, y);
 		this.text.onMouseUpdate(x, y);
+
+		text.hover = getBounds().contains(x,y);
 	}
 	@Override public void onMouseDown(int x, int y) {}
 }

@@ -7,6 +7,7 @@ public class RSGuiImageButton extends RSGuiNode implements RSGuiMouseListener {
 	private BufferedImage image1;
 	private BufferedImage image2;
 	private BufferedImage currentImage;
+	protected boolean hover;
 
 	public RSGuiImageButton( int x, int y, BufferedImage img1, BufferedImage img2 ) {
 		super( x, y, img1.getWidth(), img1.getHeight() );
@@ -44,6 +45,8 @@ public class RSGuiImageButton extends RSGuiNode implements RSGuiMouseListener {
 
 	@Override
 	public void onMouseUpdate(int x, int y) {
+		hover = getBounds().contains(x,y);
+
 		currentImage = image1;
 		if ( x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height ) {
 			currentImage = image2;

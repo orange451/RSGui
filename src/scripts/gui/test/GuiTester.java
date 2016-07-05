@@ -8,20 +8,21 @@ import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.EventBlockingOverride;
 import org.tribot.script.interfaces.Painting;
 
-import scripts.gui.RSGuiFrame;
+import scripts.gui.RSGui;
 
 @ScriptManifest(authors = { "orange451" }, category = "GUI", name = "Gui Test", version = 1.00, description = "Used to test my GUI system", gameMode = 1)
 public class GuiTester extends Script implements Painting,EventBlockingOverride {
 	public static Script plugin;
 
-	public RSGuiFrame gui = new TestGui1("scripts/gui/test/icon.png");
+	public RSGui gui = new TestGui("scripts/gui/test/icon.png");
 
 	@Override
 	public void run() {
 		plugin = this;
+
 		while(true) {
 			sleep( 50L );
-			//
+			// Add script code here
 		}
 	}
 

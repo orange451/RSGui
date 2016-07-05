@@ -34,7 +34,7 @@ public class RSGuiBox extends RSGuiPanel {
 	public boolean onMousePress(int x, int y) {
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				boolean ret = ((RSGuiMouseListener)node).onMousePress(x - this.x - padding, y - this.y - padding);
 				if ( ret ) {
 					return true;
@@ -48,7 +48,7 @@ public class RSGuiBox extends RSGuiPanel {
 	public void onMouseDown(int x, int y) {
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				((RSGuiMouseListener)node).onMouseDown(x - this.x - padding, y - this.y - padding);
 			}
 		}
@@ -58,7 +58,7 @@ public class RSGuiBox extends RSGuiPanel {
 	public void onMouseUpdate(int x, int y) {
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				((RSGuiMouseListener)node).onMouseUpdate(x - this.x - padding, y - this.y - padding);
 			}
 		}
@@ -75,6 +75,9 @@ public class RSGuiBox extends RSGuiPanel {
 
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);
+			if ( !node.isVisible() )
+				continue;
+
 			node.paint(this.panelImage.getGraphics());
 		}
 		g.drawImage(panelImage, x + padding, y + padding, null);

@@ -25,7 +25,7 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 	public RSGuiDropDown( int x, int y, int width ) {
 		super( x, y, width, image1.getHeight() + 6 );
 
-		cc = new RSGuiTextLabel( 3, 4, 64, height, "" );
+		cc = new RSGuiTextLabel( 3, 4, "" );
 		cc.setShadow(true);
 
 		i1 = new BufferedImage( 64, 64, BufferedImage.TYPE_INT_ARGB );

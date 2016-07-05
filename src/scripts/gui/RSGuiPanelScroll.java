@@ -88,7 +88,7 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				boolean ret = ((RSGuiMouseListener)node).onMousePress(mx, my + scrollY);
 				if ( ret ) {
 					return true;
@@ -104,7 +104,7 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 		for (int i = 0; i < nodes.size(); i++) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				((RSGuiMouseListener)node).onMouseUpdate(x - this.x, y - this.y + scrollY);
 			}
 		}
@@ -118,7 +118,7 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 
 		for (int i = nodes.size() - 1; i >= 0; i--) {
 			RSGuiNode node = nodes.get(i);
-			if ( node instanceof RSGuiMouseListener ) {
+			if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 				((RSGuiMouseListener)node).onMouseDown(mx, my + scrollY);
 			}
 		}
@@ -139,6 +139,9 @@ public class RSGuiPanelScroll extends RSGuiPanel {
 		this.scrollDown.y = height + scrollY - scrollBarInset - scrollDown.getHeight();
 		this.scrollDown.x = width - scrollDown.width - scrollBarInset;
 		for (int i = nodes.size() - 1; i >= 0; i-- ) {
+			if ( !nodes.get(i).visible )
+				continue;
+
 			nodes.get(i).paint(g2);
 		}
 

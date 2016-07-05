@@ -9,6 +9,7 @@ public abstract class RSGuiNode {
 	protected int y;
 	protected int width;
 	protected int height;
+	protected boolean visible = true;
 	protected RSGuiNode parent;
 	protected ArrayList<RSGuiMouseListener> listeners = new ArrayList<RSGuiMouseListener>();
 
@@ -77,6 +78,22 @@ public abstract class RSGuiNode {
 	public void setLocation( int x, int y ) {
 		this.x = x;
 		this.y = y;
+	}
+
+	/**
+	 * Sets the visibility of this node. Default is TRUE.
+	 * @param b
+	 */
+	public void setVisible( boolean b ) {
+		visible = b;
+	}
+
+	/**
+	 * Returns whether or not this node is visible.
+	 * @return
+	 */
+	public boolean isVisible() {
+		return this.visible;
 	}
 
 	/**

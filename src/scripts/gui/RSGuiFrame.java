@@ -49,25 +49,25 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	protected static final BufferedImage BUTTON_NORMAL_6 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c6.png");
 	protected static final BufferedImage BUTTON_NORMAL_7 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c7.png");
 	protected static final BufferedImage BUTTON_NORMAL_8 = AwtUtil.getImage("scripts/gui/res/spr_button_n_c8.png");
-	protected static final BufferedImage SCROLL_BAR_TOP = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_1.png");
-	protected static final BufferedImage SCROLL_BAR_MID = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_2.png");
-	protected static final BufferedImage SCROLL_BAR_BOT = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_3.png");
-	protected static final BufferedImage SCROLL_BAR_BG  = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_4.png");
+	protected static final BufferedImage SCROLL_BAR_TOP  = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_1.png");
+	protected static final BufferedImage SCROLL_BAR_MID  = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_2.png");
+	protected static final BufferedImage SCROLL_BAR_BOT  = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_3.png");
+	protected static final BufferedImage SCROLL_BAR_BG   = AwtUtil.getImage("scripts/gui/res/gui_scrollbar_4.png");
 	protected static final BufferedImage BUTTON_CHECK_1  = AwtUtil.getImage("scripts/gui/res/checkbox1.png");
 	protected static final BufferedImage BUTTON_CHECK_2  = AwtUtil.getImage("scripts/gui/res/checkbox2.png");
+	protected static final BufferedImage ICONS_TOP    = AwtUtil.getImage("scripts/gui/res/icons_top.png");
+	protected static final BufferedImage ICONS_BOTTOM = AwtUtil.getImage("scripts/gui/res/icons_bottom.png");
+	protected static final BufferedImage INVENTORY    = AwtUtil.getImage("scripts/gui/res/inventory.png");
 
 	private ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
 	private boolean open;
 	private float opacity = 1.0f;
-	private boolean notify;
 
 	private RSGuiNode closeButton;
 	private RSGuiTextLabel title;
 	private BufferedImage frameImage;
-	private BufferedImage iconImage;
-	private int ticks = 0;
 
-	public RSGuiFrame( String icon, String title ) {
+	public RSGuiFrame( String title ) {
 		super( 0, 0, 64, 64 );
 		this.center();
 
@@ -86,16 +86,12 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		this.add( this.closeButton );
 
 		// Add title label
-		this.title = new RSGuiTextLabel( 12, 11, width, 128, title);
+		this.title = new RSGuiTextLabel( 12, 11, title);
 		this.title.setBold( true );
 		this.title.setShadow( true );
 		this.title.setCentered( true );
 		this.title.setColor( new Color( 255, 152, 31 ) );
 		this.add(this.title);
-
-		// Load icon
-		if ( icon != null )
-			this.iconImage = AwtUtil.getImage(icon);
 	}
 
 	/**
@@ -147,13 +143,6 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	}
 
 	/**
-	 * Sets the notify state of the Gui.
-	 */
-	public void setNotification( boolean notify ) {
-		this.notify = notify;
-	}
-
-	/**
 	 * Closes the window.
 	 */
 	public void close() {
@@ -187,28 +176,10 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	}
 
 	public void onPaint( Graphics g2 ) {
-		ticks++;
-
-		// Draw gui button
-		if (this.open) {
-			g2.drawImage(BUTTON_GUI_OPEN, 484, 170, null);
-		} else if (this.notify && ticks / 20 % 2 == 0) {
-			g2.drawImage(BUTTON_GUI_NOTIFY, 484, 170, null);
-		} else {
-			g2.drawImage(BUTTON_GUI_NORMAL, 484, 170, null);
-		}
-
-		// Draw gui icon
-		if ( iconImage != null ) {
-			int xx = 484 + 16 - iconImage.getWidth()/2;
-			int yy = 170 + 18 - iconImage.getHeight()/2;
-			g2.drawImage( iconImage, xx, yy, null );
-		}
 
 		// If frame is not open, do not draw.
 		if ( !open )
 			return;
-		notify = false;
 
 		// Draw to frame
 		AwtUtil.clearImage(frameImage);
@@ -232,6 +203,9 @@ public abstract class RSGuiFrame extends RSGuiNode {
 
 		// Draw child nodes
 		for (int i = 0; i < nodes.size(); i++) {
+			if ( !nodes.get(i).isVisible() )
+				continue;
+
 			nodes.get(i).paint(g);
 		}
 
@@ -298,13 +272,12 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		int y = arg0.getY();
 
 		boolean isInWindow = open && (x > this.x && x < this.x + width && y > this.y && y < this.y + height);
-		boolean isOnGuiButton = x > 484 && x < 484 + 33 && y > 170 && y < 170 + 36;
 		if ( isInWindow ) {
 			// Loop through each node and attempt to click
 			for (int i = nodes.size() - 1; i >= 0; i--) {
 				RSGuiNode node = nodes.get(i);
 				// If this node implements the mouse listener, click it!
-				if ( node instanceof RSGuiMouseListener ) {
+				if ( node instanceof RSGuiMouseListener && node.isVisible() ) {
 					//GuiTester.plugin.println("Modifiers: " + arg0.getModifiers());
 					//GuiTester.plugin.println("ID: " + arg0.getID());
 
@@ -329,11 +302,6 @@ public abstract class RSGuiFrame extends RSGuiNode {
 			if ( arg0.getButton() == 1 ) {
 				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 			}
-
-		// If the "gui" button was pressed. Open the window!
-		} else if ( isOnGuiButton && arg0.getButton() == 1 ) {
-			this.open();
-			return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 		}
 
 		// Otherwise, send the event to the game!

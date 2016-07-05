@@ -58,4 +58,8 @@ public class RSFont {
 		g.setColor(col);
 		drawString( g, text, x, y );
 	}
+
+	public int getHeight() {
+		return 16;
+	}
 }
