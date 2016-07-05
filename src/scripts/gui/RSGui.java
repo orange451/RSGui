@@ -148,13 +148,13 @@ public class RSGui {
 		if ( inventoryBounds.contains( x, y ) && open ) {
 			if ( arg0.getButton() == 1 && arg0.getID() == 501) {
 				((RSGuiMouseListener)botPanel).onMousePress(x, y);
+				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 			} if ( arg0.getButton() == 1 && arg0.getID() == 506) {
 				((RSGuiMouseListener)botPanel).onMouseDown(x, y);
+				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 			} else {
 				((RSGuiMouseListener)botPanel).onMouseUpdate(x, y);
 			}
-
-			return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 		}
 
 		// If the left mouse button was clicked
