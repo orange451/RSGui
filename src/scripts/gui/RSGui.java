@@ -18,6 +18,7 @@ public class RSGui {
 	private boolean open;
 	private int repeatDraw = 0;
 
+	private Rectangle guiBounds         = new Rectangle( 484, 168, RSGuiFrame.BUTTON_GUI_NORMAL.getWidth(), RSGuiFrame.BUTTON_GUI_NORMAL.getHeight() );
 	private Rectangle iconsTopBounds    = new Rectangle( 522, 168, RSGuiFrame.ICONS_TOP.getWidth(), RSGuiFrame.ICONS_BOTTOM.getHeight() );
 	private Rectangle iconsBottomBounds = new Rectangle( 522, 466, RSGuiFrame.ICONS_BOTTOM.getWidth(), RSGuiFrame.ICONS_BOTTOM.getHeight() );
 	private Rectangle inventoryBounds   = new Rectangle( 547, 204, RSGuiFrame.INVENTORY.getWidth(), RSGuiFrame.INVENTORY.getHeight() );
@@ -80,12 +81,12 @@ public class RSGui {
 
 		// Draw gui button
 		if (this.isOpen()) {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_OPEN, 484, 170, null);
+			g.drawImage(RSGuiFrame.BUTTON_GUI_OPEN, guiBounds.x, guiBounds.y, null);
 			notify = false;
 		} else if (this.notify && ticks / 20 % 2 == 0) {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_NOTIFY, 484, 170, null);
+			g.drawImage(RSGuiFrame.BUTTON_GUI_NOTIFY, guiBounds.x, guiBounds.y, null);
 		} else {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_NORMAL, 484, 170, null);
+			g.drawImage(RSGuiFrame.BUTTON_GUI_NORMAL, guiBounds.x, guiBounds.y, null);
 		}
 
 		if ( open || repeatDraw > 0 ) {
@@ -107,8 +108,8 @@ public class RSGui {
 
 		// Draw gui icon
 		if ( iconImage != null ) {
-			int xx = 484 + 16 - iconImage.getWidth()/2;
-			int yy = 170 + 18 - iconImage.getHeight()/2;
+			int xx = guiBounds.x + guiBounds.width/2 - iconImage.getWidth()/2;
+			int yy = guiBounds.y + guiBounds.height/2 - iconImage.getHeight()/2;
 			g.drawImage( iconImage, xx, yy, null );
 		}
 
@@ -128,8 +129,6 @@ public class RSGui {
 	public EventBlockingOverride.OVERRIDE_RETURN mouseEvent(MouseEvent arg0) {
 		int x = arg0.getX();
 		int y = arg0.getY();
-
-		boolean isOnGuiButton = x > 484 && x < 484 + 33 && y > 170 && y < 170 + 36;
 		// Loop through each node and attempt to click
 		for (int i = windows.size() - 1; i >= 0; i--) {
 			RSGuiFrame node = windows.get(i);
@@ -161,7 +160,7 @@ public class RSGui {
 		if ( arg0.getButton() == 1 && arg0.getID() == 501 ) {
 
 			// If the "gui" button was pressed. Open the window!
-			if ( isOnGuiButton ) {
+			if ( guiBounds.contains( x, y ) ) {
 				//windows.get(0).open();
 				open = true;
 				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
