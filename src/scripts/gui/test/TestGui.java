@@ -1,5 +1,6 @@
 package scripts.gui.test;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import scripts.gui.AwtUtil;
@@ -69,4 +70,8 @@ public class TestGui extends RSGui {
 		box.add(button);
 	}
 
+	@Override
+	public void paint(Graphics g) {
+		//
+	}
 }

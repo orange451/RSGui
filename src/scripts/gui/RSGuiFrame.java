@@ -1,21 +1,12 @@
 package scripts.gui;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import org.tribot.api2007.Game;
 import org.tribot.script.interfaces.EventBlockingOverride;

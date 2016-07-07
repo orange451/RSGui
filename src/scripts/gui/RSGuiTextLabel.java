@@ -1,11 +1,7 @@
 package scripts.gui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
-import scripts.gui.font.ChatColor;
 import scripts.gui.font.RSFont;
 
 public class RSGuiTextLabel extends RSGuiNode {

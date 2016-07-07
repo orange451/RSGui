@@ -1,7 +1,8 @@
 package scripts.gui;
 
-import java.awt.Color;
+import java.awt.AlphaComposite;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -10,9 +11,10 @@ import java.util.ArrayList;
 
 import org.tribot.script.interfaces.EventBlockingOverride;
 
-public class RSGui {
+public abstract class RSGui {
 	private ArrayList<RSGuiFrame> windows = new ArrayList<RSGuiFrame>();
 	private BufferedImage iconImage;
+	private BufferedImage iconImage2;
 	private int ticks = 0;
 	private boolean notify;
 	private boolean open;
@@ -26,8 +28,10 @@ public class RSGui {
 	private RSGuiPanel botPanel;
 
 	public RSGui( String icon ) {
-		if ( icon != null )
+		if ( icon != null ) {
 			this.iconImage = AwtUtil.getImage(icon);
+			this.iconImage2 = AwtUtil.generateMask( this.iconImage );
+		}
 
 		this.botPanel = new RSGuiPanel( inventoryBounds.width, inventoryBounds.height );
 		this.botPanel.setLocation( inventoryBounds.x, inventoryBounds.y );
@@ -54,6 +58,13 @@ public class RSGui {
 	 */
 	public void close() {
 		this.open = false;
+	}
+
+	/**
+	 * Opens the bot panel.
+	 */
+	public void open() {
+		this.open = true;
 	}
 
 	/**
@@ -110,7 +121,11 @@ public class RSGui {
 		if ( iconImage != null ) {
 			int xx = guiBounds.x + guiBounds.width/2 - iconImage.getWidth()/2;
 			int yy = guiBounds.y + guiBounds.height/2 - iconImage.getHeight()/2;
-			g.drawImage( iconImage, xx, yy, null );
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
+			g2d.drawImage( iconImage2, xx+1, yy+1, null );
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+			g2d.drawImage( iconImage, xx, yy, null );
 		}
 
 		// Draw frames
@@ -120,9 +135,20 @@ public class RSGui {
 				frame.onPaint( g );
 			}
 		}
+
+		this.paint(g);
 	}
 
+	public abstract void paint(Graphics g);
+
 	public EventBlockingOverride.OVERRIDE_RETURN keyEvent(KeyEvent arg0) {
+		if ( arg0.getKeyCode() == KeyEvent.VK_ESCAPE && arg0.getID() == KeyEvent.KEY_PRESSED ) {
+			this.close();
+			if ( arg0.isControlDown() ) {
+				this.open();
+				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+			}
+		}
 		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
 	}
 

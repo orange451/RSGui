@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -42,5 +41,19 @@ public class AwtUtil {
 		g2.setColor(new Color(0, 0, 0, 0));
 		g2.fillRect(0,0,image.getWidth(),image.getHeight());
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+	}
+
+	public static BufferedImage generateMask( BufferedImage image ) {
+		BufferedImage img = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB );
+	    for (int x = 0; x < img.getWidth(); x++) {
+	        for (int y = 0; y < img.getHeight(); y++) {
+	        	int rgb = image.getRGB(x, y);
+	        	if ( ((rgb>>24) & 0xff) <= 0 )
+	        		continue;
+	            img.setRGB(x, y, Color.black.getRGB());
+	        }
+	    }
+
+	    return img;
 	}
 }
