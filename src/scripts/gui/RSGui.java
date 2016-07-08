@@ -1,6 +1,7 @@
 package scripts.gui;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -30,7 +31,7 @@ public abstract class RSGui {
 	public RSGui( String icon ) {
 		if ( icon != null ) {
 			this.iconImage = AwtUtil.getImage(icon);
-			this.iconImage2 = AwtUtil.generateMask( this.iconImage );
+			this.iconImage2 = AwtUtil.generateMask( this.iconImage, new Color( 32, 32, 32 ) );
 		}
 
 		this.botPanel = new RSGuiPanel( inventoryBounds.width, inventoryBounds.height );
@@ -65,6 +66,12 @@ public abstract class RSGui {
 	 */
 	public void open() {
 		this.open = true;
+
+		int x = botPanel.x+1;
+		int y = botPanel.y+1;
+		((RSGuiMouseListener)botPanel).onMousePress(x, y);
+		((RSGuiMouseListener)botPanel).onMouseDown(x, y);
+		((RSGuiMouseListener)botPanel).onMouseUpdate(x, y);
 	}
 
 	/**
@@ -101,6 +108,15 @@ public abstract class RSGui {
 		}
 
 		if ( open || repeatDraw > 0 ) {
+			/*
+			g.setColor( Color.red );
+			g.fillRect( iconsTopBounds.x, iconsTopBounds.y, iconsTopBounds.width, iconsTopBounds.height );
+			g.setColor( Color.yellow );
+			g.fillRect( iconsBottomBounds.x, iconsBottomBounds.y, iconsBottomBounds.width, iconsBottomBounds.height );
+			g.setColor( Color.green );
+			g.fillRect( inventoryBounds.x, inventoryBounds.y, inventoryBounds.width, inventoryBounds.height );
+			 */
+
 			g.drawImage( RSGuiFrame.ICONS_TOP, iconsTopBounds.x, iconsTopBounds.y, null );
 			g.drawImage( RSGuiFrame.ICONS_BOTTOM, iconsBottomBounds.x, iconsBottomBounds.y, null );
 			g.drawImage( RSGuiFrame.INVENTORY, inventoryBounds.x, inventoryBounds.y, null );
@@ -108,23 +124,12 @@ public abstract class RSGui {
 			botPanel.paint(g);
 		}
 
-		/*
-		g.setColor( Color.red );
-		g.fillRect( iconsTopBounds.x, iconsTopBounds.y, iconsTopBounds.width, iconsTopBounds.height );
-		g.setColor( Color.yellow );
-		g.fillRect( iconsBottomBounds.x, iconsBottomBounds.y, iconsBottomBounds.width, iconsBottomBounds.height );
-		g.setColor( Color.green );
-		g.fillRect( inventoryBounds.x, inventoryBounds.y, inventoryBounds.width, inventoryBounds.height );
-		 */
-
 		// Draw gui icon
 		if ( iconImage != null ) {
 			int xx = guiBounds.x + guiBounds.width/2 - iconImage.getWidth()/2;
 			int yy = guiBounds.y + guiBounds.height/2 - iconImage.getHeight()/2;
 			Graphics2D g2d = (Graphics2D)g;
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.6f));
 			g2d.drawImage( iconImage2, xx+1, yy+1, null );
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 			g2d.drawImage( iconImage, xx, yy, null );
 		}
 
@@ -188,13 +193,13 @@ public abstract class RSGui {
 			// If the "gui" button was pressed. Open the window!
 			if ( guiBounds.contains( x, y ) ) {
 				//windows.get(0).open();
-				open = true;
+				open();
 				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 			}
 
 			// If any one of the inventory icons are clicked.
 			if ( iconsBottomBounds.contains(x,y) || iconsTopBounds.contains(x,y)) {
-				open = false;
+				close();
 				return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
 			}
 		}

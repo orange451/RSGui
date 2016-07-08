@@ -43,14 +43,14 @@ public class AwtUtil {
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 	}
 
-	public static BufferedImage generateMask( BufferedImage image ) {
+	public static BufferedImage generateMask( BufferedImage image, Color col ) {
 		BufferedImage img = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB );
 	    for (int x = 0; x < img.getWidth(); x++) {
 	        for (int y = 0; y < img.getHeight(); y++) {
 	        	int rgb = image.getRGB(x, y);
 	        	if ( ((rgb>>24) & 0xff) <= 0 )
 	        		continue;
-	            img.setRGB(x, y, Color.black.getRGB());
+	            img.setRGB(x, y, col.getRGB());
 	        }
 	    }
 
