@@ -1,210 +1,167 @@
 package scripts.gui;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.tribot.script.interfaces.EventBlockingOverride;
+import scripts.gui.backend.RSGuiFrame;
+import scripts.gui.backend.RSGuiRes;
 
-public abstract class RSGui {
-	private ArrayList<RSGuiFrame> windows = new ArrayList<RSGuiFrame>();
-	private BufferedImage iconImage;
-	private BufferedImage iconImage2;
-	private int ticks = 0;
-	private boolean notify;
-	private boolean open;
-	private int repeatDraw = 0;
 
-	private Rectangle guiBounds         = new Rectangle( 484, 168, RSGuiFrame.BUTTON_GUI_NORMAL.getWidth(), RSGuiFrame.BUTTON_GUI_NORMAL.getHeight() );
-	private Rectangle iconsTopBounds    = new Rectangle( 522, 168, RSGuiFrame.ICONS_TOP.getWidth(), RSGuiFrame.ICONS_BOTTOM.getHeight() );
-	private Rectangle iconsBottomBounds = new Rectangle( 522, 466, RSGuiFrame.ICONS_BOTTOM.getWidth(), RSGuiFrame.ICONS_BOTTOM.getHeight() );
-	private Rectangle inventoryBounds   = new Rectangle( 547, 204, RSGuiFrame.INVENTORY.getWidth(), RSGuiFrame.INVENTORY.getHeight() );
 
-	private RSGuiPanel botPanel;
+public class RSGui {
+	private ArrayList<RSGuiFrame> windows = new ArrayList();
+	public ArrayList<RSGuiTab> tabs = new ArrayList();
 
-	public RSGui( String icon ) {
-		if ( icon != null ) {
-			this.iconImage = AwtUtil.getImage(icon);
-			this.iconImage2 = AwtUtil.generateMask( this.iconImage, new Color( 32, 32, 32 ) );
+	public static final Rectangle iconsTopBounds = new Rectangle(522, 168, RSGuiRes.ICONS_TOP.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
+	public static final Rectangle iconsBottomBounds = new Rectangle(522, 466, RSGuiRes.ICONS_BOTTOM.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
+	public static final Rectangle inventoryBounds = new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());
+	private static RSGui gui;
+
+	private RSGui() {
+		//
+	}
+	
+	public static void initialize() {
+		gui = new RSGui();
+	}
+
+	public static RSGui getInstance() {
+		return gui;
+	}
+
+	public static void registerWindow(RSGuiFrame frame) {
+		gui.windows.add(frame);
+	}
+
+	public static void deregisterWindow(RSGuiFrame frame) {
+		gui.windows.remove(frame);
+	}
+
+	public void onPaint(Graphics g) {
+		for (int i = 0; i < gui.tabs.size(); i++) {
+			RSGuiTab t = (RSGuiTab)this.tabs.get(i);
+			t.onPaint(g);
 		}
 
-		this.botPanel = new RSGuiPanel( inventoryBounds.width, inventoryBounds.height );
-		this.botPanel.setLocation( inventoryBounds.x, inventoryBounds.y );
-	}
 
-	/**
-	 * Registers a window with this GUI. A window cannot be used without first registering it.
-	 * @param frame
-	 */
-	public void registerWindow( RSGuiFrame frame ) {
-		this.windows.add( frame );
-	}
-
-	/**
-	 * Returns whether the gui panel is open.
-	 * @return
-	 */
-	public boolean isOpen() {
-		return this.open;
-	}
-
-	/**
-	 * Closes the bot panel.
-	 */
-	public void close() {
-		this.open = false;
-	}
-
-	/**
-	 * Opens the bot panel.
-	 */
-	public void open() {
-		this.open = true;
-
-		int x = botPanel.x+1;
-		int y = botPanel.y+1;
-		((RSGuiMouseListener)botPanel).onMousePress(x, y);
-		((RSGuiMouseListener)botPanel).onMouseDown(x, y);
-		((RSGuiMouseListener)botPanel).onMouseUpdate(x, y);
-	}
-
-	/**
-	 * Sets the notify state of the Gui.
-	 */
-	public void setNotification( boolean notify ) {
-		this.notify = notify;
-	}
-
-	/**
-	 * Returns the panel associated with this gui.
-	 * @return
-	 */
-	public RSGuiPanel getBotPanel() {
-		return this.botPanel;
-	}
-
-	public void onPaint( Graphics g ) {
-		repeatDraw--;
-		ticks++;
-
-		// Draw for four frames after menu is closed
-		if ( open )
-			repeatDraw = 3;
-
-		// Draw gui button
-		if (this.isOpen()) {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_OPEN, guiBounds.x, guiBounds.y, null);
-			notify = false;
-		} else if (this.notify && ticks / 20 % 2 == 0) {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_NOTIFY, guiBounds.x, guiBounds.y, null);
-		} else {
-			g.drawImage(RSGuiFrame.BUTTON_GUI_NORMAL, guiBounds.x, guiBounds.y, null);
-		}
-
-		if ( open || repeatDraw > 0 ) {
-			/*
-			g.setColor( Color.red );
-			g.fillRect( iconsTopBounds.x, iconsTopBounds.y, iconsTopBounds.width, iconsTopBounds.height );
-			g.setColor( Color.yellow );
-			g.fillRect( iconsBottomBounds.x, iconsBottomBounds.y, iconsBottomBounds.width, iconsBottomBounds.height );
-			g.setColor( Color.green );
-			g.fillRect( inventoryBounds.x, inventoryBounds.y, inventoryBounds.width, inventoryBounds.height );
-			 */
-
-			g.drawImage( RSGuiFrame.ICONS_TOP, iconsTopBounds.x, iconsTopBounds.y, null );
-			g.drawImage( RSGuiFrame.ICONS_BOTTOM, iconsBottomBounds.x, iconsBottomBounds.y, null );
-			g.drawImage( RSGuiFrame.INVENTORY, inventoryBounds.x, inventoryBounds.y, null );
-
-			botPanel.paint(g);
-		}
-
-		// Draw gui icon
-		if ( iconImage != null ) {
-			int xx = guiBounds.x + guiBounds.width/2 - iconImage.getWidth()/2;
-			int yy = guiBounds.y + guiBounds.height/2 - iconImage.getHeight()/2;
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage( iconImage2, xx+1, yy+1, null );
-			g2d.drawImage( iconImage, xx, yy, null );
-		}
-
-		// Draw frames
-		for (int i = 0; i < windows.size(); i++) {
-			RSGuiFrame frame = windows.get(i);
-			if ( frame.isVisible() && frame.isOpen() ) {
-				frame.onPaint( g );
+		for (int i = 0; i < gui.windows.size(); i++) {
+			RSGuiFrame frame = (RSGuiFrame)this.windows.get(i);
+			if ((frame.isVisible()) && (frame.isOpen())) {
+				frame.onPaint(g);
 			}
 		}
-
-		this.paint(g);
 	}
 
-	public abstract void paint(Graphics g);
-
 	public EventBlockingOverride.OVERRIDE_RETURN keyEvent(KeyEvent arg0) {
-		if ( arg0.getKeyCode() == KeyEvent.VK_ESCAPE && arg0.getID() == KeyEvent.KEY_PRESSED ) {
-			this.close();
-			if ( arg0.isControlDown() ) {
-				this.open();
-				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+		for (int i = 0; i < this.tabs.size(); i++) {
+			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
+			if (tab.isOpen()) {
+
+				if (arg0.getID() == 401) {
+					if (isKeyCloseKey(arg0.getKeyCode())) {
+						tab.close();
+					}
+
+					if (arg0.getKeyCode() == 192) {
+						tab.open();
+						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+					}
+				}
 			}
 		}
 		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
+	}
+
+	private boolean isKeyCloseKey(int keyCode) {
+		switch (keyCode) {
+		case 27:  return true;
+		case 112:  return true;
+		case 113:  return true;
+		case 114:  return true;
+		case 115:  return true;
+		case 116:  return true;
+		case 117:  return true;
+		case 118:  return true;
+		case 119:  return true;
+		case 120:  return true;
+		case 121:  return true;
+		case 122:  return true;
+		case 123:  return true;
+		}
+		return false;
 	}
 
 	public EventBlockingOverride.OVERRIDE_RETURN mouseEvent(MouseEvent arg0) {
 		int x = arg0.getX();
 		int y = arg0.getY();
-		// Loop through each node and attempt to click
-		for (int i = windows.size() - 1; i >= 0; i--) {
-			RSGuiFrame node = windows.get(i);
 
-			// If this node implements the mouse listener, click it!
-			if ( node.isOpen() && node.isVisible() ) {
+		boolean openWindow = false;
 
+
+		for (int i = this.windows.size() - 1; i >= 0; i--) {
+			RSGuiFrame node = (RSGuiFrame)this.windows.get(i);
+
+
+			if ((node.isOpen()) && (node.isVisible())) {
+				openWindow = true;
 				EventBlockingOverride.OVERRIDE_RETURN ret = node.mouseEvent(arg0);
-				if ( ret.equals( EventBlockingOverride.OVERRIDE_RETURN.DISMISS ) ) {
+				if (ret.equals(EventBlockingOverride.OVERRIDE_RETURN.DISMISS)) {
 					return ret;
 				}
 			}
 		}
 
-		// Check the bot panel!
-		if ( inventoryBounds.contains( x, y ) && open ) {
-			if ( arg0.getButton() == 1 && arg0.getID() == 501) {
-				((RSGuiMouseListener)botPanel).onMousePress(x, y);
-				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
-			} if ( arg0.getButton() == 1 && arg0.getID() == 506) {
-				((RSGuiMouseListener)botPanel).onMouseDown(x, y);
-				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
-			} else {
-				((RSGuiMouseListener)botPanel).onMouseUpdate(x, y);
+
+		for (int i = 0; i < this.tabs.size(); i++) {
+			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
+			if (tab.isOpen())
+			{
+				if (inventoryBounds.contains(x, y))
+				{
+
+					if ((arg0.getButton() == 1) && (arg0.getID() == 501) && (!openWindow)) {
+						tab.onMousePress(x, y);
+						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS; }
+					if ((arg0.getID() == 506) && (!openWindow)) {
+						tab.onMouseDown(x, y);
+						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+					}
+					tab.onMouseUpdate(x, y);
+				}
+			}
+		}
+		if ((arg0.getButton() == 1) && (arg0.getID() == 501)) {
+			for (int i = 0; i < this.tabs.size(); i++) {
+				RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
+
+
+				if (tab.getBounds().contains(x, y)) {
+					if (!openWindow) {
+						for (int a = 0; a < this.tabs.size(); a++) {
+							RSGuiTab tt = (RSGuiTab)this.tabs.get(a);
+							tt.close();
+						}
+						tab.open();
+					}
+					return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+				}
+
+
+				if (((iconsBottomBounds.contains(x, y)) || (iconsTopBounds.contains(x, y))) && (!openWindow)) {
+					tab.close();
+				}
 			}
 		}
 
-		// If the left mouse button was clicked
-		if ( arg0.getButton() == 1 && arg0.getID() == 501 ) {
 
-			// If the "gui" button was pressed. Open the window!
-			if ( guiBounds.contains( x, y ) ) {
-				//windows.get(0).open();
-				open();
-				return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
-			}
-
-			// If any one of the inventory icons are clicked.
-			if ( iconsBottomBounds.contains(x,y) || iconsTopBounds.contains(x,y)) {
-				close();
-				return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
-			}
-		}
-
-		// Otherwise, send the event to the game!
 		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
+	}
+
+	public static void addTab(RSGuiTab tab) {
+		gui.tabs.add(tab);
 	}
 }
