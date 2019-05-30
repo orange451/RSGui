@@ -7,17 +7,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import org.tribot.api2007.Game;
 import org.tribot.script.interfaces.EventBlockingOverride;
-import org.tribot.script.interfaces.EventBlockingOverride.OVERRIDE_RETURN;
 import scripts.gui.AwtUtil;
 import scripts.gui.PlayerGui;
 
 
-public abstract class RSGuiFrame
-extends RSGuiNode
-{
-	private ArrayList<RSGuiNode> nodes = new ArrayList();
+public abstract class RSGuiFrame extends RSGuiNode {
+	private ArrayList<RSGuiNode> nodes = new ArrayList<RSGuiNode>();
 	private boolean open;
 	private boolean canClose = true;
 	private float opacity = 1.0F;
@@ -25,11 +21,9 @@ extends RSGuiNode
 	private RSGuiTextLabel title;
 	private BufferedImage frameImage;
 
-	public RSGuiFrame(String title)
-	{
+	public RSGuiFrame(String title) {
 		super(0, 0, 64, 64);
 		center();
-
 
 		this.closeButton = new RSGuiImageButton(0, 0, RSGuiRes.BUTTON_CLOSE1, RSGuiRes.BUTTON_CLOSE2);
 		this.closeButton.addMouseListener(new RSGuiMouseListener() {
@@ -92,17 +86,10 @@ extends RSGuiNode
 	}
 
 	public void center() {
-		int vw = Game.getViewportWidth();
-		int vh = Game.getViewportHeight();
-		
-		if ( PlayerGui.isFullscreen() ) {
-			Rectangle r = PlayerGui.getInternalViewportInterfaceBounds();
-			vw = r.width;
-			vh = r.height;
-		}
+		Rectangle viewport = PlayerGui.getInternalViewportInterfaceBounds();
 
-		this.x = (3 + vw / 2 - this.width / 2);
-		this.y = (3 + vh / 2 - this.height / 2);
+		this.x = viewport.x + (viewport.width / 2 - this.width / 2);
+		this.y = viewport.y + (viewport.height / 2 - this.height / 2);
 	}
 
 	public void open() {

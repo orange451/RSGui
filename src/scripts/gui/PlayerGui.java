@@ -7,6 +7,8 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterfaceChild;
 import org.tribot.api2007.types.RSInterfaceMaster;
 
+import jdk.nashorn.internal.runtime.options.Options;
+
 public class PlayerGui {
 	private static final int rootInterfaceID = 122;
 	private static final int viewportInterfaceID = 0;
@@ -91,17 +93,23 @@ public class PlayerGui {
 	}
 
 	/**
-	 * Returns the viewport
+	 * Returns the viewport. If non fullscreen this returns {@link Game#getViewportWidth()} and {@link Game#getViewportHeight()}.<br>
+	 * If in fullscreen this returns the absolte puts of: Interface(122,0).
 	 * @return 
 	 */
 	public static Rectangle getInternalViewportInterfaceBounds() {
+		Rectangle normal = new Rectangle(4,4,Game.getViewportWidth(),Game.getViewportHeight());
+		
+		if ( !isFullscreen() )
+			return normal;
+		
 		RSInterfaceMaster rootInterface = Interfaces.get(rootInterfaceID);
 		if ( rootInterface == null )
-			return new Rectangle();
+			return normal;
 		
 		RSInterfaceChild viewport = rootInterface.getChild(viewportInterfaceID);
 		if ( viewport == null )
-			return new Rectangle();
+			return normal;
 		
 		return viewport.getAbsoluteBounds();
 	}
