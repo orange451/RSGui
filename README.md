@@ -24,6 +24,6 @@ RSGuiRes.FONT_REGULAR.drawString( graphics, "Smaller text. No shadow.", 0, 16 );
 # Screenshots
 ![img1](https://i.imgur.com/0EJhcRY.png)
 
-![img2](https://i.imgur.com/0EJhcRY.png)
+![img2](https://i.imgur.com/TDQmold.png)
 
 ![img3](https://i.imgur.com/IBT498H.png)
