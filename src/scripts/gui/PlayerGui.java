@@ -8,7 +8,7 @@ import org.tribot.api2007.types.RSInterfaceChild;
 import org.tribot.api2007.types.RSInterfaceMaster;
 
 public class PlayerGui {
-	private static final int rootInterfaceID = 163;
+	private static final int rootInterfaceID = 122;
 	private static final int viewportInterfaceID = 0;
 	
 	private static final int rootscreenInterfaceID = 164;
@@ -22,15 +22,7 @@ public class PlayerGui {
 	 * @return
 	 */
 	public static boolean isFullscreen() {
-		RSInterfaceMaster rootInterface = Interfaces.get(rootInterfaceID);
-		if ( rootInterface == null )
-			return false;
-		
-		RSInterfaceChild viewport = rootInterface.getChild(viewportInterfaceID);
-		if ( viewport == null )
-			return false;
-		
-		Rectangle bounds = viewport.getAbsoluteBounds();
+		Rectangle bounds = getInternalViewportInterfaceBounds();
 		if ( bounds.getX() == 4 && bounds.getY() == 4 )
 			return false;
 		 
@@ -96,5 +88,21 @@ public class PlayerGui {
 			return true;
 		
 		return false;
+	}
+
+	/**
+	 * Returns the viewport
+	 * @return 
+	 */
+	public static Rectangle getInternalViewportInterfaceBounds() {
+		RSInterfaceMaster rootInterface = Interfaces.get(rootInterfaceID);
+		if ( rootInterface == null )
+			return new Rectangle();
+		
+		RSInterfaceChild viewport = rootInterface.getChild(viewportInterfaceID);
+		if ( viewport == null )
+			return new Rectangle();
+		
+		return viewport.getAbsoluteBounds();
 	}
 }

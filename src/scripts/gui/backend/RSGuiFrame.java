@@ -11,6 +11,7 @@ import org.tribot.api2007.Game;
 import org.tribot.script.interfaces.EventBlockingOverride;
 import org.tribot.script.interfaces.EventBlockingOverride.OVERRIDE_RETURN;
 import scripts.gui.AwtUtil;
+import scripts.gui.PlayerGui;
 
 
 public abstract class RSGuiFrame
@@ -86,40 +87,33 @@ extends RSGuiNode
 
 
 
-	public void setCanClose(boolean b)
-	{
+	public void setCanClose(boolean b) {
 		this.canClose = b;
 	}
 
-
-
-	public void center()
-	{
+	public void center() {
 		int vw = Game.getViewportWidth();
 		int vh = Game.getViewportHeight();
+		
+		if ( PlayerGui.isFullscreen() ) {
+			Rectangle r = PlayerGui.getInternalViewportInterfaceBounds();
+			vw = r.width;
+			vh = r.height;
+		}
 
 		this.x = (3 + vw / 2 - this.width / 2);
 		this.y = (3 + vh / 2 - this.height / 2);
 	}
 
-
-
-	public void open()
-	{
+	public void open() {
 		this.open = true;
 	}
 
-
-
-	public void close()
-	{
+	public void close() {
 		this.open = false;
 	}
 
-
-
-	public void pack()
-	{
+	public void pack() {
 		Rectangle wn = new Rectangle(0, 0, 64, 64);
 		for (int i = 0; i < this.nodes.size(); i++) {
 			RSGuiNode node = (RSGuiNode)this.nodes.get(i);
@@ -134,17 +128,11 @@ extends RSGuiNode
 		setSize(wn.width + 6, wn.height + 6);
 	}
 
-
-
-
-	public boolean isOpen()
-	{
+	public boolean isOpen() {
 		return this.open;
 	}
 
-
-	public void onPaint(Graphics g2)
-	{
+	public void onPaint(Graphics g2) {
 		if (!this.open) {
 			return;
 		}
