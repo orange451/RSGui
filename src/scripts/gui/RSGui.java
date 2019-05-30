@@ -6,21 +6,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
 import org.tribot.script.interfaces.EventBlockingOverride;
 import scripts.gui.backend.RSGuiFrame;
 import scripts.gui.backend.RSGuiRes;
 
-
-
 public class RSGui {
-	private ArrayList<RSGuiFrame> windows = new ArrayList();
-	public ArrayList<RSGuiTab> tabs = new ArrayList();
-
-	/*public static final Rectangle iconsTopBounds = new Rectangle(522, 168, RSGuiRes.ICONS_TOP.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
-	public static final Rectangle iconsBottomBounds = new Rectangle(522, 466, RSGuiRes.ICONS_BOTTOM.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
-	public static final Rectangle inventoryBounds = new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());*/
+	private ArrayList<RSGuiFrame> windows = new ArrayList<RSGuiFrame>();
+	public ArrayList<RSGuiTab> tabs = new ArrayList<RSGuiTab>();
+	
 	private static RSGui gui;
+	protected static boolean ignoreTabInput;
 
 	private RSGui() {
 		//
@@ -62,14 +60,17 @@ public class RSGui {
 			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
 			if (tab.isOpen()) {
 
-				if (arg0.getID() == 401) {
-					if (isKeyCloseKey(arg0.getKeyCode())) {
-						tab.close();
-					}
-
-					if (arg0.getKeyCode() == 192) {
-						tab.open();
-						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+				// Test closing/opening tabs
+				if ( !ignoreTabInput ) {
+					if (arg0.getID() == 401) {
+						if (isKeyCloseKey(arg0.getKeyCode())) {
+							tab.close();
+						}
+	
+						if (arg0.getKeyCode() == 192) {
+							tab.open();
+							return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+						}
 					}
 				}
 			}
@@ -79,22 +80,24 @@ public class RSGui {
 
 	private boolean isKeyCloseKey(int keyCode) {
 		switch (keyCode) {
-		case 27:  return true;
-		case 112:  return true;
-		case 113:  return true;
-		case 114:  return true;
-		case 115:  return true;
-		case 116:  return true;
-		case 117:  return true;
-		case 118:  return true;
-		case 119:  return true;
-		case 120:  return true;
-		case 121:  return true;
-		case 122:  return true;
-		case 123:  return true;
+			case 27:  return true;
+			case 112:  return true;
+			case 113:  return true;
+			case 114:  return true;
+			case 115:  return true;
+			case 116:  return true;
+			case 117:  return true;
+			case 118:  return true;
+			case 119:  return true;
+			case 120:  return true;
+			case 121:  return true;
+			case 122:  return true;
+			case 123:  return true;
 		}
 		return false;
 	}
+	
+	protected TABS returnTab;
 
 	public EventBlockingOverride.OVERRIDE_RETURN mouseEvent(MouseEvent arg0) {
 		int x = arg0.getX();
@@ -132,11 +135,13 @@ public class RSGui {
 				}
 			}
 		}
+		
+		// Handle clicking tabs
 		if ((arg0.getButton() == 1) && (arg0.getID() == 501)) {
 			for (int i = 0; i < this.tabs.size(); i++) {
 				RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
 
-
+				// Close all OTHER tabs, open this one if clicked.
 				if (tab.getBounds().contains(x, y)) {
 					if (!openWindow) {
 						for (int a = 0; a < this.tabs.size(); a++) {
@@ -148,7 +153,9 @@ public class RSGui {
 					return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 				}
 
+				// If we click on the regular icons, close.
 				if (((getIconsBottomBounds().contains(x, y)) || (getIconsTopBounds().contains(x, y))) && (!openWindow)) {
+					returnTab = GameTab.getOpen();
 					tab.close();
 				}
 			}
@@ -200,6 +207,10 @@ public class RSGui {
 			b.y += b.height+7;
 			b.width = RSGuiRes.ICONS_BOTTOM.getWidth();
 			b.height = RSGuiRes.ICONS_BOTTOM.getHeight();
+			
+			if ( PlayerGui.inExpandedTabsMode() ) {
+				b.x -= b.width-45;
+			}
 		} else {
 			b.x -= 25;
 			b.y -= 37;
@@ -218,7 +229,13 @@ public class RSGui {
 		
 		if ( PlayerGui.sidePanelsEnabled() ) {
 			b = getIconsTopBounds();
-			b.y += b.height-1;
+			
+			if ( !PlayerGui.inExpandedTabsMode() ) {
+				b.y += b.height-1;
+			} else {
+				b.x += b.width-45;
+			}
+			
 		} else {
 			b.x -= 25;
 			b.y += b.height;

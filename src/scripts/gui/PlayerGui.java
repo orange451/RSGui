@@ -2,6 +2,7 @@ package scripts.gui;
 
 import java.awt.Rectangle;
 
+import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterfaceChild;
 import org.tribot.api2007.types.RSInterfaceMaster;
@@ -66,5 +67,34 @@ public class PlayerGui {
 			return false;
 		
 		return true;
+	}
+	
+	/**
+	 * Returns whether the player has expanded tabs enabled. Expanded tabs are active when:<br>
+	 * 1) In Fullscreen<br>
+	 * 2) In Side Panels Mode<br>
+	 * 3) Screen width is large enough to not stack the tabs ontop of eachother.<br>
+	 * @return
+	 */
+	public static boolean inExpandedTabsMode() {
+		if ( !PlayerGui.isFullscreen() )
+			return false;
+		
+		if ( !PlayerGui.sidePanelsEnabled() )
+			return false;
+		
+		RSInterfaceMaster rootInventory = Interfaces.get(rootInventoryInterfaceID);
+		if ( rootInventory == null )
+			return false;
+		
+		RSInterfaceChild inventory = rootInventory.getChild(inventoryInterfaceID);
+		if ( inventory == null )
+			return false;
+		
+		Rectangle t = inventory.getAbsoluteBounds();
+		if ( t.y+t.height + 60 > Game.getViewportHeight() )
+			return true;
+		
+		return false;
 	}
 }

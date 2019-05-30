@@ -8,9 +8,15 @@ import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.tribot.api.General;
+import org.tribot.api2007.Game;
+import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
+
 import scripts.gui.backend.RSGuiMouseListener;
 import scripts.gui.backend.RSGuiPanel;
 import scripts.gui.backend.RSGuiRes;
+import scripts.util.misc.TabUtil;
 
 public abstract class RSGuiTab implements RSGuiMouseListener {
 	private static final int STARTX = 484;
@@ -32,15 +38,28 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		this.guiBounds = new Rectangle(484, 168, RSGuiRes.BUTTON_GUI_NORMAL.getWidth(), RSGuiRes.BUTTON_GUI_NORMAL.getHeight());
 	}
 
+	/**
+	 * Sets this RSGuiTab's index location. RSGuiTabs are aligned vertically on the screen.<br>
+	 * A positive number moves them downward. A negative number moves them upward.
+	 * @param location
+	 */
 	public void setLocation(int location) {
 		this.location = location;
 	}
 
+	/**
+	 * Set the iucon from a URL.
+	 * @param icon
+	 */
 	public void setIcon(URL icon) {
 		this.iconImage = AwtUtil.getImage(icon);
 		this.iconImage2 = AwtUtil.generateMask(this.iconImage, new Color(32, 32, 32));
 	}
 
+	/**
+	 * Set the icon from a String URL. See {@link #setIcon(URL)}.
+	 * @param icon
+	 */
 	public void setIconFromUrl(String icon) {
 		try {
 			setIcon(new URL(icon));
@@ -49,41 +68,56 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		}
 	}
 
+	/**
+	 * Set the icon from a local filepath.
+	 * @param icon
+	 */
 	public void setIconFromFile(String icon) {
 		this.iconImage = AwtUtil.getImage(icon);
 		this.iconImage2 = AwtUtil.generateMask(this.iconImage, new Color(32, 32, 32));
 	}
 
-
-
-
-	public RSGuiPanel getBotPanel()
-	{
+	/**
+	 * Returns the root panel used for drawing to this RSGuiTab.
+	 * @return
+	 */
+	public RSGuiPanel getBotPanel() {
 		return this.botPanel;
 	}
 
+	/**
+	 * Returns the bounds of the RSGuiTab. This contains it's position and size.
+	 * @return
+	 */
 	public Rectangle getBounds() {
 		return new Rectangle(this.guiBounds.x, this.guiBounds.y, this.guiBounds.width, this.guiBounds.height);
 	}
 
-
-
-
-	public boolean isOpen()
-	{
+	/**
+	 * Returns whether the tab is currently open.
+	 * @return
+	 */
+	public boolean isOpen() {
 		return this.open;
 	}
 
-
-
+	/**
+	 * Closes this RSGuiTab.
+	 */
 	public void close() {
 		this.open = false;
+
+		if ( PlayerGui.sidePanelsEnabled() ) {
+			RSGui.ignoreTabInput = true;
+			TabUtil.openTab(RSGui.getInstance().returnTab);
+			RSGui.ignoreTabInput = false;
+		}
 	}
 
-
-
-	public void open()
-	{
+	/**
+	 * Opens this RSGuiTab.
+	 */
+	public void open() {
 		this.open = true;
 
 		int x = this.botPanel.getX() + 1;
@@ -91,12 +125,22 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		this.botPanel.onMousePress(x, y);
 		this.botPanel.onMouseDown(x, y);
 		this.botPanel.onMouseUpdate(x, y);
+		
+		// Make sure a tab is open or we get ugly drawing in side-panel mode.
+		if ( PlayerGui.sidePanelsEnabled() ) {
+			if (GameTab.getOpen() == null || GameTab.getOpen()==TABS.NULL) {
+				RSGui.ignoreTabInput = true;
+				TabUtil.openTab(TABS.LOGOUT);
+				RSGui.ignoreTabInput = false;
+			}
+		}
 	}
 
-
-
-	public void setNotification(boolean notify)
-	{
+	/**
+	 * Sets the notification flag for this RSGuiTab.
+	 * @param notify
+	 */
+	public void setNotification(boolean notify) {
 		this.notify = notify;
 	}
 
@@ -104,11 +148,17 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		this.ticks += 1;
 		this.repeatDraw -= 1;
 		
+		if ( this.open && GameTab.getOpen() == TABS.NULL ) {
+			TabUtil.openTab(TABS.LOGOUT);
+		}
+		
 		this.guiBounds = RSGui.getInstance().getTabBounds(location);
-
+		if ( PlayerGui.sidePanelsEnabled() && GameTab.getOpen() == TABS.NULL ) {
+			guiBounds.x = Game.getViewportWidth()-guiBounds.width;
+		}
 
 		if (this.open) {
-			this.repeatDraw = 10;
+			this.repeatDraw = PlayerGui.sidePanelsEnabled()?5:10;
 		}
 
 		if (isOpen()) {
@@ -120,7 +170,7 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 			g.drawImage(RSGuiRes.BUTTON_GUI_NORMAL, this.guiBounds.x, this.guiBounds.y, null);
 		}
 
-		if ((this.open) || (this.repeatDraw > 5)) {
+		if ((this.open) || (this.repeatDraw >= 2)) {
 			Rectangle bottomBounds = RSGui.getInstance().getIconsBottomBounds();
 			Rectangle topBounds = RSGui.getInstance().getIconsTopBounds();
 
@@ -133,6 +183,22 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 
 			g.drawImage(botGraphic, bottomBounds.x, bottomBounds.y, null);
 			g.drawImage(topGraphic, topBounds.x, topBounds.y, null);
+			
+			// Open the return tab if we lost our tab.
+			if ( !open && repeatDraw > 0 ) {
+				if ( GameTab.getOpen() == null || GameTab.getOpen().equals(GameTab.TABS.NULL) ) {
+					if ( RSGui.getInstance().returnTab != null && !RSGui.getInstance().returnTab.equals(GameTab.TABS.NULL)) {
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								RSGui.ignoreTabInput = true;
+								TabUtil.openTab(RSGui.getInstance().returnTab);
+								RSGui.ignoreTabInput = false;
+							}
+						}).start();
+					}
+				}
+			}
 		}
 
 		if ((this.open) || (this.repeatDraw > 0)) {
@@ -163,18 +229,15 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 	public abstract void paint(Graphics paramGraphics);
 
 
-	public boolean onMousePress(int x, int y)
-	{
+	public boolean onMousePress(int x, int y) {
 		return this.botPanel.onMousePress(x, y);
 	}
 
-	public void onMouseDown(int x, int y)
-	{
+	public void onMouseDown(int x, int y) {
 		this.botPanel.onMouseDown(x, y);
 	}
 
-	public void onMouseUpdate(int x, int y)
-	{
+	public void onMouseUpdate(int x, int y) {
 		this.botPanel.onMouseUpdate(x, y);
 	}
 }
