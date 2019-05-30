@@ -39,14 +39,17 @@ public class GuiTester extends Script implements Painting, EventBlockingOverride
 		}
 	}
 
+	// Paint RSGUI
 	public void onPaint(Graphics g) {
 		RSGui.getInstance().onPaint(g);
 	}
 
+	// Pass key events to RSGUI
 	public EventBlockingOverride.OVERRIDE_RETURN overrideKeyEvent(KeyEvent arg0) {
 		return RSGui.getInstance().keyEvent(arg0);
 	}
 
+	// Pass mouse events to RSGUI
 	public EventBlockingOverride.OVERRIDE_RETURN overrideMouseEvent(MouseEvent arg0) {
 		return RSGui.getInstance().mouseEvent(arg0);
 	}

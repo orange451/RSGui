@@ -12,9 +12,7 @@ import scripts.gui.backend.RSGuiMouseListener;
 import scripts.gui.backend.RSGuiPanel;
 import scripts.gui.backend.RSGuiRes;
 
-public abstract class RSGuiTab
-implements RSGuiMouseListener
-{
+public abstract class RSGuiTab implements RSGuiMouseListener {
 	private static final int STARTX = 484;
 	private static final int STARTY = 168;
 	private boolean open;
@@ -25,16 +23,17 @@ implements RSGuiMouseListener
 	private int ticks = 0;
 	private int repeatDraw = 0;
 	private Rectangle guiBounds;
+	
+	private int location = 0;
 
 	public RSGuiTab() {
-		this.botPanel = new RSGuiPanel(RSGui.inventoryBounds.width, RSGui.inventoryBounds.height);
-		this.botPanel.setLocation(RSGui.inventoryBounds.x, RSGui.inventoryBounds.y);
+		this.botPanel = new RSGuiPanel(RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());
 
 		this.guiBounds = new Rectangle(484, 168, RSGuiRes.BUTTON_GUI_NORMAL.getWidth(), RSGuiRes.BUTTON_GUI_NORMAL.getHeight());
 	}
 
 	public void setLocation(int location) {
-		this.guiBounds.y = (168 + (RSGuiRes.BUTTON_GUI_NORMAL.getHeight() - 1) * location);
+		this.location = location;
 	}
 
 	public void setIcon(URL icon) {
@@ -104,6 +103,8 @@ implements RSGuiMouseListener
 	public void onPaint(Graphics g) {
 		this.ticks += 1;
 		this.repeatDraw -= 1;
+		
+		this.guiBounds = RSGui.getInstance().getTabBounds(location);
 
 
 		if (this.open) {
@@ -119,15 +120,30 @@ implements RSGuiMouseListener
 			g.drawImage(RSGuiRes.BUTTON_GUI_NORMAL, this.guiBounds.x, this.guiBounds.y, null);
 		}
 
-
 		if ((this.open) || (this.repeatDraw > 5)) {
-			g.drawImage(RSGuiRes.ICONS_TOP, RSGui.iconsTopBounds.x, RSGui.iconsTopBounds.y, null);
-			g.drawImage(RSGuiRes.ICONS_BOTTOM, RSGui.iconsBottomBounds.x, RSGui.iconsBottomBounds.y, null);
+			Rectangle bottomBounds = RSGui.getInstance().getIconsBottomBounds();
+			Rectangle topBounds = RSGui.getInstance().getIconsTopBounds();
+
+			BufferedImage topGraphic = RSGuiRes.ICONS_TOP;
+			BufferedImage botGraphic = RSGuiRes.ICONS_BOTTOM;
+			if ( PlayerGui.sidePanelsEnabled() ) {
+				topGraphic = RSGuiRes.ICONS_TOP_ALT;
+				botGraphic = RSGuiRes.ICONS_BOTTOM_ALT;
+			}
+
+			g.drawImage(botGraphic, bottomBounds.x, bottomBounds.y, null);
+			g.drawImage(topGraphic, topBounds.x, topBounds.y, null);
 		}
 
-
 		if ((this.open) || (this.repeatDraw > 0)) {
-			g.drawImage(RSGuiRes.INVENTORY, RSGui.inventoryBounds.x, RSGui.inventoryBounds.y, null);
+			BufferedImage inventoryGraphic = RSGuiRes.INVENTORY;
+			if ( PlayerGui.isFullscreen() )
+				inventoryGraphic = RSGuiRes.INVENTORY_FULL;
+			
+			Rectangle inventoryBounds = RSGui.getInstance().getInventoryBounds();
+			this.botPanel.setLocation(inventoryBounds.x, inventoryBounds.y);
+			
+			g.drawImage(inventoryGraphic, inventoryBounds.x, inventoryBounds.y, null);
 			this.botPanel.paint(g);
 		}
 

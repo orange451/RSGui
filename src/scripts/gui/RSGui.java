@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import org.tribot.api2007.Interfaces;
 import org.tribot.script.interfaces.EventBlockingOverride;
 import scripts.gui.backend.RSGuiFrame;
 import scripts.gui.backend.RSGuiRes;
@@ -16,9 +17,9 @@ public class RSGui {
 	private ArrayList<RSGuiFrame> windows = new ArrayList();
 	public ArrayList<RSGuiTab> tabs = new ArrayList();
 
-	public static final Rectangle iconsTopBounds = new Rectangle(522, 168, RSGuiRes.ICONS_TOP.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
+	/*public static final Rectangle iconsTopBounds = new Rectangle(522, 168, RSGuiRes.ICONS_TOP.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
 	public static final Rectangle iconsBottomBounds = new Rectangle(522, 466, RSGuiRes.ICONS_BOTTOM.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
-	public static final Rectangle inventoryBounds = new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());
+	public static final Rectangle inventoryBounds = new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());*/
 	private static RSGui gui;
 
 	private RSGui() {
@@ -118,11 +119,8 @@ public class RSGui {
 
 		for (int i = 0; i < this.tabs.size(); i++) {
 			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
-			if (tab.isOpen())
-			{
-				if (inventoryBounds.contains(x, y))
-				{
-
+			if (tab.isOpen()) {
+				if (getInventoryBounds().contains(x, y)) {
 					if ((arg0.getButton() == 1) && (arg0.getID() == 501) && (!openWindow)) {
 						tab.onMousePress(x, y);
 						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS; }
@@ -150,18 +148,84 @@ public class RSGui {
 					return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
 				}
 
-
-				if (((iconsBottomBounds.contains(x, y)) || (iconsTopBounds.contains(x, y))) && (!openWindow)) {
+				if (((getIconsBottomBounds().contains(x, y)) || (getIconsTopBounds().contains(x, y))) && (!openWindow)) {
 					tab.close();
 				}
 			}
 		}
-
 
 		return EventBlockingOverride.OVERRIDE_RETURN.PROCESS;
 	}
 
 	public static void addTab(RSGuiTab tab) {
 		gui.tabs.add(tab);
+	}
+	
+	protected Rectangle getTabBounds(int location) {
+		Rectangle temp = getIconsTopBounds();
+		if ( PlayerGui.sidePanelsEnabled() ) {
+			temp = getInventoryBounds();
+			
+			temp.x -= 7;
+			temp.y -= 7;
+		}
+		
+		if ( !PlayerGui.isFullscreen() )
+			temp.x -= 6;
+		
+		temp.width = 33;
+		temp.height = 36;
+		
+		temp.y += location*temp.height;
+		temp.x -= temp.width;
+		
+		return temp;
+	}
+
+	protected Rectangle getInventoryBounds() {
+		if ( !PlayerGui.isFullscreen() )
+			return new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());
+	
+		return Interfaces.get(7, 0).getAbsoluteBounds();
+	}
+	
+	protected Rectangle getIconsTopBounds() {
+		if ( !PlayerGui.isFullscreen() )
+			return new Rectangle(522, 168, RSGuiRes.ICONS_TOP.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
+		
+		Rectangle b = getInventoryBounds();
+		
+		if ( PlayerGui.sidePanelsEnabled() ) {
+			b.x -= 34;
+			b.y += b.height+7;
+			b.width = RSGuiRes.ICONS_BOTTOM.getWidth();
+			b.height = RSGuiRes.ICONS_BOTTOM.getHeight();
+		} else {
+			b.x -= 25;
+			b.y -= 37;
+			b.width = RSGuiRes.ICONS_BOTTOM.getWidth();
+			b.height = RSGuiRes.ICONS_BOTTOM.getHeight();
+		}
+		
+		return b;
+	}
+	
+	protected Rectangle getIconsBottomBounds() {
+		if ( !PlayerGui.isFullscreen() )
+			return new Rectangle(522, 466, RSGuiRes.ICONS_BOTTOM.getWidth(), RSGuiRes.ICONS_BOTTOM.getHeight());
+
+		Rectangle b = getInventoryBounds();
+		
+		if ( PlayerGui.sidePanelsEnabled() ) {
+			b = getIconsTopBounds();
+			b.y += b.height-1;
+		} else {
+			b.x -= 25;
+			b.y += b.height;
+			b.width = RSGuiRes.ICONS_BOTTOM.getWidth();
+			b.height = RSGuiRes.ICONS_BOTTOM.getHeight();
+		}
+		
+		return b;
 	}
 }

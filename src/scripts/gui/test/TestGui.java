@@ -20,7 +20,6 @@ public class TestGui extends RSGuiTab {
 
 	public RSGuiFrame frame = new TestFrame();
 
-
 	public TestGui(String icon) {
 		setIconFromUrl(icon);
 
@@ -52,14 +51,12 @@ public class TestGui extends RSGuiTab {
 
 			@Override
 			public void onMouseDown(int paramInt1, int paramInt2) {
-				// TODO Auto-generated method stub
-				
+				//
 			}
 
 			@Override
 			public void onMouseUpdate(int paramInt1, int paramInt2) {
-				// TODO Auto-generated method stub
-				
+				//
 			}
 		});
 

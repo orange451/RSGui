@@ -73,10 +73,15 @@ public class RSGuiRes
   public static final BufferedImage BUTTON_TOGGLE_S_7 = AwtUtil.getImage(SPRITESHEET, 322, 68, 5, 5);
   public static final BufferedImage BUTTON_TOGGLE_S_8 = AwtUtil.getImage(SPRITESHEET, 322, 43, 5, 24);
   public static final BufferedImage BUTTON_TOGGLE_S_9 = AwtUtil.getImage(SPRITESHEET, 328, 43, 24, 24);
-  
+
   public static final BufferedImage ICONS_TOP = AwtUtil.getImage(SPRITESHEET, 0, 0, 243, 36);
+  public static final BufferedImage ICONS_TOP_ALT = AwtUtil.getImage(SPRITESHEET, 0, 336, 231, 36);
+  
   public static final BufferedImage ICONS_BOTTOM = AwtUtil.getImage(SPRITESHEET, 0, 298, 243, 37);
-  public static final BufferedImage INVENTORY = AwtUtil.getImage(SPRITESHEET, 0, 36, 190, 262);
+  public static final BufferedImage ICONS_BOTTOM_ALT = AwtUtil.getImage(SPRITESHEET, 0, 372, 231, 36);
+  
+  public static final BufferedImage INVENTORY = AwtUtil.getImage(SPRITESHEET, 0, 36, 190, 261);
+  public static final BufferedImage INVENTORY_FULL = AwtUtil.getImage(SPRITESHEET, 242, 74, 190, 261);
   
   private static URL getURL(String string) {
     try {
