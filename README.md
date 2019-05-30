@@ -20,3 +20,10 @@ It currently supports:
 # If you would like to JUST use the runescape fonts for your projects, you can access them easily with:
 RSGuiRes.FONT_BOLD.drawStringShadow( graphics, "Hello World!" + ChatColor.GREEN + " Green text!", 0, 0 );
 RSGuiRes.FONT_REGULAR.drawString( graphics, "Smaller text. No shadow.", 0, 16 );
+
+# Screenshots
+![img1](https://i.imgur.com/0EJhcRY.png)
+
+![img2](https://i.imgur.com/0EJhcRY.png)
+
+![img3](https://i.imgur.com/IBT498H.png)
