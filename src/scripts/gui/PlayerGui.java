@@ -7,10 +7,8 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterfaceChild;
 import org.tribot.api2007.types.RSInterfaceMaster;
 
-import jdk.nashorn.internal.runtime.options.Options;
-
 public class PlayerGui {
-	private static final int rootInterfaceID = 122;
+	private static final int rootInterfaceID = 163;
 	private static final int viewportInterfaceID = 0;
 	
 	private static final int rootscreenInterfaceID = 164;
@@ -100,9 +98,6 @@ public class PlayerGui {
 	public static Rectangle getInternalViewportInterfaceBounds() {
 		Rectangle normal = new Rectangle(4,4,Game.getViewportWidth(),Game.getViewportHeight());
 		
-		if ( !isFullscreen() )
-			return normal;
-		
 		RSInterfaceMaster rootInterface = Interfaces.get(rootInterfaceID);
 		if ( rootInterface == null )
 			return normal;
@@ -111,6 +106,9 @@ public class PlayerGui {
 		if ( viewport == null )
 			return normal;
 		
-		return viewport.getAbsoluteBounds();
+		Rectangle r = viewport.getAbsoluteBounds();
+		r.height -= 165; // Chatbox height
+		
+		return r;
 	}
 }
