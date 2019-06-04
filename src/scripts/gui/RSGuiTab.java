@@ -130,7 +130,7 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		if ( PlayerGui.sidePanelsEnabled() ) {
 			if (GameTab.getOpen() == null || GameTab.getOpen()==TABS.NULL) {
 				RSGui.ignoreTabInput = true;
-				TabUtil.openTab(TABS.LOGOUT);
+				TabUtil.openTab(TABS.OPTIONS);
 				RSGui.ignoreTabInput = false;
 			}
 		}
@@ -149,7 +149,7 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 		this.repeatDraw -= 1;
 		
 		if ( this.open && GameTab.getOpen() == TABS.NULL ) {
-			TabUtil.openTab(TABS.LOGOUT);
+			TabUtil.openTab(TABS.OPTIONS);
 		}
 		
 		this.guiBounds = RSGui.getInstance().getTabBounds(location);

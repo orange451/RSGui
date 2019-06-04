@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import org.tribot.api.General;
 import org.tribot.api2007.GameTab;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
@@ -41,13 +42,13 @@ public class RSGui {
 	}
 
 	public void onPaint(Graphics g) {
-		for (int i = 0; i < gui.tabs.size(); i++) {
+		for (int i = 0; i < tabs.size(); i++) {
 			RSGuiTab t = (RSGuiTab)this.tabs.get(i);
 			t.onPaint(g);
 		}
 
 
-		for (int i = 0; i < gui.windows.size(); i++) {
+		for (int i = 0; i < windows.size(); i++) {
 			RSGuiFrame frame = (RSGuiFrame)this.windows.get(i);
 			if ((frame.isVisible()) && (frame.isOpen())) {
 				frame.onPaint(g);
@@ -193,7 +194,7 @@ public class RSGui {
 		if ( !PlayerGui.isFullscreen() )
 			return new Rectangle(547, 204, RSGuiRes.INVENTORY.getWidth(), RSGuiRes.INVENTORY.getHeight());
 	
-		return Interfaces.get(7, 0).getAbsoluteBounds();
+		return Interfaces.get(182, 0).getAbsoluteBounds();
 	}
 	
 	protected Rectangle getIconsTopBounds() {

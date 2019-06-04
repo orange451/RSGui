@@ -14,7 +14,7 @@ public class PlayerGui {
 	private static final int rootscreenInterfaceID = 164;
 	private static final int screenInterfaceID = 0;
 	
-	private static final int rootInventoryInterfaceID = 7;
+	private static final int rootInventoryInterfaceID = 182;
 	private static final int inventoryInterfaceID = 0;
 	
 	/**
