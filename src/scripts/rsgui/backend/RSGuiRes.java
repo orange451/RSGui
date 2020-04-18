@@ -25,15 +25,30 @@ public class RSGuiRes
 	public static final BufferedImage SPRITESHEET = AwtUtil.getImage(getURL("https://firstrecon.net/public/tribot/spritesheet.png"));
 
 	public static final BufferedImage BORDER_TOP_LEFT = AwtUtil.getImage(SPRITESHEET, 265, 0, 18, 18);
-	public static final BufferedImage BORDER_TOP = AwtUtil.getImage(SPRITESHEET, 284, 0, 18, 18);
+	public static final BufferedImage BORDER_TOP = AwtUtil.getImage(SPRITESHEET, 284, 0, 18, 7);
 	public static final BufferedImage BORDER_TOP_RIGHT = AwtUtil.getImage(SPRITESHEET, 303, 0, 18, 18);
 	public static final BufferedImage BORDER_RIGHT = AwtUtil.getImage(SPRITESHEET, 303, 19, 18, 18);
 	public static final BufferedImage BORDER_BOTTOM_RIGHT = AwtUtil.getImage(SPRITESHEET, 303, 38, 18, 18);
-	public static final BufferedImage BORDER_BOTTOM = AwtUtil.getImage(SPRITESHEET, 284, 38, 18, 18);
+	public static final BufferedImage BORDER_BOTTOM = AwtUtil.getImage(SPRITESHEET, 284, 49, 18, 7);
+	public static final BufferedImage BORDER_SEPARATE = AwtUtil.getImage(SPRITESHEET, 284, 57, 18, 6);
 	public static final BufferedImage BORDER_BOTTOM_LEFT = AwtUtil.getImage(SPRITESHEET, 265, 38, 18, 18);
 	public static final BufferedImage BORDER_LEFT = AwtUtil.getImage(SPRITESHEET, 265, 19, 18, 18);
+	
+	public static final BufferedImage BORDER_TOP_LEFT_NEW = AwtUtil.getImage(SPRITESHEET, 265+94, 0, 18, 18);
+	public static final BufferedImage BORDER_TOP_NEW = AwtUtil.getImage(SPRITESHEET, 284+94, 0, 18, 7);
+	public static final BufferedImage BORDER_TOP_RIGHT_NEW = AwtUtil.getImage(SPRITESHEET, 303+94, 0, 18, 18);
+	public static final BufferedImage BORDER_RIGHT_NEW = AwtUtil.getImage(SPRITESHEET, 303+94, 19, 18, 18);
+	public static final BufferedImage BORDER_BOTTOM_RIGHT_NEW = AwtUtil.getImage(SPRITESHEET, 303+94, 38, 18, 18);
+	public static final BufferedImage BORDER_BOTTOM_NEW = AwtUtil.getImage(SPRITESHEET, 284+94, 49, 18, 7);
+	public static final BufferedImage BORDER_SEPARATE_NEW = AwtUtil.getImage(SPRITESHEET, 284+94, 57, 18, 6);
+	public static final BufferedImage BORDER_BOTTOM_LEFT_NEW = AwtUtil.getImage(SPRITESHEET, 265+94, 38, 18, 18);
+	public static final BufferedImage BORDER_LEFT_NEW = AwtUtil.getImage(SPRITESHEET, 265+94, 19, 18, 18);
+
 	public static final BufferedImage BUTTON_CLOSE1 = AwtUtil.getImage(SPRITESHEET, 190, 173, 21, 21);
 	public static final BufferedImage BUTTON_CLOSE2 = AwtUtil.getImage(SPRITESHEET, 190, 195, 21, 21);
+	public static final BufferedImage BUTTON_CLOSE1_NEW = AwtUtil.getImage(SPRITESHEET, 190+22, 173, 21, 21);
+	public static final BufferedImage BUTTON_CLOSE2_NEW = AwtUtil.getImage(SPRITESHEET, 190+22, 195, 21, 21);
+	
 	public static final BufferedImage BUTTON_GUI_NORMAL = AwtUtil.getImage(SPRITESHEET, 190, 36, 33, 36);
 	public static final BufferedImage BUTTON_GUI_OPEN = AwtUtil.getImage(SPRITESHEET, 190, 72, 33, 36);
 	public static final BufferedImage BUTTON_GUI_NOTIFY = AwtUtil.getImage(SPRITESHEET, 190, 108, 33, 36);
