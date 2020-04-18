@@ -55,7 +55,7 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		this.width = width;
 		this.height = height;
 
-		this.frameImage = new BufferedImage(width, height, 2);
+		this.frameImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	public void setOpacity(float alpha) {
@@ -139,7 +139,7 @@ public abstract class RSGuiFrame extends RSGuiNode {
 				RSGuiRes.BACKGROUND_COLOR.getGreen() / 255.0F, RSGuiRes.BACKGROUND_COLOR.getBlue() / 255.0F,
 				this.opacity);
 		g.setColor(col);
-		g.fillRect(1, 1, this.width-2, this.height-2);
+		g.fillRect(4, 4, this.width-8, this.height-8);
 
 		drawBorder(g);
 
@@ -190,24 +190,31 @@ public abstract class RSGuiFrame extends RSGuiNode {
 	protected abstract void paint(Graphics paramGraphics);
 
 	private void drawBorder(Graphics g) {
-		if ( newBorderStyle ) {
-			int tw = RSGuiRes.BORDER_LEFT_NEW.getWidth();
-			for (int i = 0; i <= this.width; i += RSGuiRes.BORDER_LEFT_NEW.getWidth()) {
-				g.drawImage(RSGuiRes.BORDER_TOP_NEW, i, 0, null);
-				g.drawImage(RSGuiRes.BORDER_BOTTOM_NEW, i, this.height - 7, null);
-				g.drawImage(RSGuiRes.BORDER_SEPARATE_NEW, i + 5, 29, null);
-			}
-	
+		if ( newBorderStyle ) {	
 			int th = RSGuiRes.BORDER_LEFT_NEW.getHeight();
 			for (int i = 0; i <= this.height; i += RSGuiRes.BORDER_LEFT_NEW.getHeight()) {
 				g.drawImage(RSGuiRes.BORDER_LEFT_NEW, 0, i, null);
 				g.drawImage(RSGuiRes.BORDER_RIGHT_NEW, this.width - th, i, null);
+			}
+			
+			int tw = RSGuiRes.BORDER_LEFT_NEW.getWidth();
+			for (int i = 8; i <= this.width-16; i += RSGuiRes.BORDER_LEFT_NEW.getWidth()) {
+				g.drawImage(RSGuiRes.BORDER_TOP_NEW, i, 0, null);
+				g.drawImage(RSGuiRes.BORDER_BOTTOM_NEW, i, this.height - 7, null);
 			}
 	
 			g.drawImage(RSGuiRes.BORDER_TOP_LEFT_NEW, 0, 0, null);
 			g.drawImage(RSGuiRes.BORDER_TOP_RIGHT_NEW, this.width - 18, 0, null);
 			g.drawImage(RSGuiRes.BORDER_BOTTOM_RIGHT_NEW, this.width - 18, this.height - 18, null);
 			g.drawImage(RSGuiRes.BORDER_BOTTOM_LEFT_NEW, 0, this.height - 18, null);
+			
+			// Separater
+			float maxLen = this.width - 6;
+			g.setClip(0, 0, (int)maxLen, height);
+			for (int i = 0; i <= maxLen; i += RSGuiRes.BORDER_LEFT_NEW.getWidth()) {
+				g.drawImage(RSGuiRes.BORDER_SEPARATE_NEW, i + 6, 29, null);
+			}
+			g.setClip(0, 0, width, height);
 		} else {
 			int tw = RSGuiRes.BORDER_LEFT.getWidth();
 			for (int i = 0; i <= this.width; i += RSGuiRes.BORDER_LEFT.getWidth()) {

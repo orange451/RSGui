@@ -70,6 +70,7 @@ public class RSGuiRes
 
 	public static final BufferedImage BUTTON_CHECK_1 = AwtUtil.getImage(SPRITESHEET, 223, 36, 15, 15);
 	public static final BufferedImage BUTTON_CHECK_2 = AwtUtil.getImage(SPRITESHEET, 223, 51, 15, 15);
+	public static final BufferedImage BUTTON_CHECK_3 = AwtUtil.getImage(SPRITESHEET, 223, 66, 15, 15);
 
 	public static final BufferedImage BUTTON_TOGGLE_1 = AwtUtil.getImage(SPRITESHEET, 322, 0, 5, 5);
 	public static final BufferedImage BUTTON_TOGGLE_2 = AwtUtil.getImage(SPRITESHEET, 328, 0, 24, 5);
