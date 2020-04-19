@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import scripts.rsgui.font.RSFont;
+
 public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	private String text;
 	private Color selectColor = Color.yellow;
@@ -11,16 +13,17 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 	private Color disableColor = Color.gray;
 	private boolean disabled;
 	protected boolean hover = false;
+	private RSFont font;
 
 	public RSGuiTextButton(int x, int y, int width, int height, String text) {
 		super(x, y, width, height);
 
 		this.text = text;
+		this.font = RSGuiRes.FONT_REGULAR;
 	}
 
 	protected void paint(Graphics g) {
-		scripts.rsgui.font.RSFont f = RSGuiRes.FONT_REGULAR;
-		g.setFont(f.getFont());
+		g.setFont(font.getFont());
 
 		if (this.width == -1)
 			this.width = g.getFontMetrics().stringWidth(this.text);
@@ -86,5 +89,13 @@ public class RSGuiTextButton extends RSGuiNode implements RSGuiMouseListener {
 
 	public boolean isDisabled() {
 		return this.disabled;
+	}
+
+	public void setFont(RSFont font) {
+		this.font = font;
+	}
+	
+	public RSFont getFont() {
+		return this.font;
 	}
 }

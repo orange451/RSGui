@@ -54,13 +54,13 @@ public class AwtUtil {
 		return null;
 	}
 
-	public static Font getFont(String name) {
+	public static Font getFont(String name, float point) {
 		Font font = null;
 		try {
 			General.println("Loading font: " + name);
 			URL url = AwtUtil.class.getClassLoader().getResource(name);
 
-			return getFont(url);
+			return getFont(url, point);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			General.println(name + " not loaded.  Using serif font.");
@@ -69,11 +69,11 @@ public class AwtUtil {
 		return font;
 	}
 
-	public static Font getFont(URL url) {
+	public static Font getFont(URL url, float point) {
 		try {
 			InputStream stream = url.openStream();
 			Font font = Font.createFont(0, stream);
-			return font.deriveFont(0, 16.0F);
+			return font.deriveFont(0, point);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -2,6 +2,7 @@ package scripts.rsgui.backend;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class RSGuiNode {
 	protected int x;
@@ -10,7 +11,7 @@ public abstract class RSGuiNode {
 	protected int height;
 	protected boolean visible = true;
 	protected RSGuiNode parent;
-	protected ArrayList<RSGuiMouseListener> listeners = new ArrayList<RSGuiMouseListener>();
+	protected List<RSGuiMouseListener> listeners = new ArrayList<RSGuiMouseListener>();
 
 	public RSGuiNode(int x, int y, int width, int height) {
 		setLocation(x, y);

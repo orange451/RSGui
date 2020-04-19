@@ -16,8 +16,9 @@ public class RSGuiRes
 		General.println("Initializing RSGui resources");
 	}
 
-	public static final RSFont FONT_BOLD = new RSFont(AwtUtil.getFont(getURL("https://firstrecon.net/public/tribot/textBold.ttf")));
-	public static final RSFont FONT_REGULAR = new RSFont(AwtUtil.getFont(getURL("https://firstrecon.net/public/tribot/textRegular.ttf")));
+	public static final RSFont FONT_BOLD = new RSFont(AwtUtil.getFont(getURL("https://firstrecon.net/public/tribot/textBold.ttf"), 16.0F));
+	public static final RSFont FONT_REGULAR = new RSFont(AwtUtil.getFont(getURL("https://firstrecon.net/public/tribot/textRegular.ttf"), 16.0F));
+	public static final RSFont FONT_SMALL = new RSFont(AwtUtil.getFont(getURL("https://firstrecon.net/public/tribot/textSmall.ttf"), 16.0F));
 
 	public static final Color BACKGROUND_COLOR = new Color(73, 64, 52);
 	public static final Color BACKGROUND_COLOR_LIGHT = new Color(82, 73, 62);
