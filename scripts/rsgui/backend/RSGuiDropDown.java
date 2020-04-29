@@ -67,7 +67,7 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 			}
 		});
 		this.panel.add(b);
-		b.setSize(this.width - 20, b.getFont().getHeight());
+		b.setSize(this.width - 32, b.getFont().getHeight());
 		b.setLocation(b.x + 4, b.y + this.choices.size() * b.getHeight());
 
 		this.choices.add(b);
