@@ -55,7 +55,7 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 			}
 
 			public boolean onMousePress(int x, int y) {
-				RSGuiDropDown.this.choice = b.getText();
+				setChoice(b.getText());
 				RSGuiDropDown.this.close();
 				for (int i = 0; i < RSGuiDropDown.this.dropListener.size(); i++) {
 					((RSGuiDropDownListener) RSGuiDropDown.this.dropListener.get(i)).onChoiceChanged(choice);
@@ -76,6 +76,10 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 		}
 
 		return b;
+	}
+	
+	public void setChoice(String choice) {
+		RSGuiDropDown.this.choice = choice;
 	}
 
 	public String getCurrentChoice() {
