@@ -91,7 +91,10 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 	}
 
 	protected void paint(Graphics g) {
-		this.panel.setSize(this.width, (this.height - 4) * this.rows);
+		if ( this.choices.size() > 0 )
+			this.panel.setSize(this.width, choices.get(0).getHeight() * this.rows + 4);
+		else
+			this.panel.setSize(this.width, (this.height - 4));
 
 		if ((this.i1.getWidth() != this.width) || (this.i1.getHeight() != this.height)) {
 			this.i1 = new BufferedImage(this.width, this.height, 2);
@@ -157,6 +160,10 @@ public class RSGuiDropDown extends RSGuiNode implements RSGuiMouseListener {
 		this.choices.clear();
 		createPanel();
 		this.choice = "";
+	}
+	
+	public int choices() {
+		return this.choices.size();
 	}
 
 	public void addDropDownListener(RSGuiDropDownListener listener) {
