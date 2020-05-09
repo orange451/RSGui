@@ -35,6 +35,8 @@ public class RSGuiRes
 	public static final BufferedImage BORDER_BOTTOM_LEFT = AwtUtil.getImage(SPRITESHEET, 265, 38, 18, 18);
 	public static final BufferedImage BORDER_LEFT = AwtUtil.getImage(SPRITESHEET, 265, 19, 18, 18);
 	
+	public static final BufferedImage BACK_ARROW = AwtUtil.getImage(SPRITESHEET, 191, 218, 32, 32);
+	
 	public static final BufferedImage BORDER_TOP_LEFT_NEW = AwtUtil.getImage(SPRITESHEET, 265+94, 0, 18, 18);
 	public static final BufferedImage BORDER_TOP_NEW = AwtUtil.getImage(SPRITESHEET, 284+94, 0, 18, 7);
 	public static final BufferedImage BORDER_TOP_RIGHT_NEW = AwtUtil.getImage(SPRITESHEET, 303+94, 0, 18, 18);
