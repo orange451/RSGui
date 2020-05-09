@@ -107,7 +107,7 @@ public class RSGui {
 
 		boolean openWindow = false;
 
-
+		// Handle window clicking
 		for (int i = this.windows.size() - 1; i >= 0; i--) {
 			RSGuiFrame node = (RSGuiFrame)this.windows.get(i);
 
@@ -117,23 +117,6 @@ public class RSGui {
 				EventBlockingOverride.OVERRIDE_RETURN ret = node.mouseEvent(arg0);
 				if (ret.equals(EventBlockingOverride.OVERRIDE_RETURN.DISMISS)) {
 					return ret;
-				}
-			}
-		}
-
-
-		for (int i = 0; i < this.tabs.size(); i++) {
-			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
-			if (tab.isOpen()) {
-				if (getInventoryBounds().contains(x, y)) {
-					if ((arg0.getButton() == 1) && (arg0.getID() == 501) && (!openWindow)) {
-						tab.onMousePress(x, y);
-						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS; }
-					if ((arg0.getID() == 506) && (!openWindow)) {
-						tab.onMouseDown(x, y);
-						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
-					}
-					tab.onMouseUpdate(x, y);
 				}
 			}
 		}
@@ -148,6 +131,8 @@ public class RSGui {
 					if (!openWindow) {
 						for (int a = 0; a < this.tabs.size(); a++) {
 							RSGuiTab tt = (RSGuiTab)this.tabs.get(a);
+							if ( tt == tab )
+								continue;
 							tt.close();
 						}
 						tab.open();
@@ -159,6 +144,24 @@ public class RSGui {
 				if (((getIconsBottomBounds().contains(x, y)) || (getIconsTopBounds().contains(x, y))) && (!openWindow)) {
 					returnTab = GameTab.getOpen();
 					tab.close();
+					//return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+				}
+			}
+		}
+
+		// Handle clicking open tab
+		for (int i = 0; i < this.tabs.size(); i++) {
+			RSGuiTab tab = (RSGuiTab)this.tabs.get(i);
+			if (tab.isOpen()) {
+				if (getInventoryBounds().contains(x, y)) {
+					if ((arg0.getButton() == 1) && (arg0.getID() == 501) && (!openWindow)) {
+						tab.onMousePress(x, y);
+						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS; }
+					if ((arg0.getID() == 506) && (!openWindow)) {
+						tab.onMouseDown(x, y);
+						return EventBlockingOverride.OVERRIDE_RETURN.DISMISS;
+					}
+					tab.onMouseUpdate(x, y);
 				}
 			}
 		}

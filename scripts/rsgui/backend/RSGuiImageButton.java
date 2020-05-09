@@ -15,6 +15,10 @@ public class RSGuiImageButton extends RSGuiNode implements RSGuiMouseListener {
 		this.currentImage = this.image1;
 	}
 
+	public RSGuiImageButton(int x, int y, BufferedImage img1) {
+		this(x, y, img1, img1);
+	}
+
 	protected void paint(java.awt.Graphics g) {
 		g.drawImage(this.currentImage, this.x, this.y, null);
 	}

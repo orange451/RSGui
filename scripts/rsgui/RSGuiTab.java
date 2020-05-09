@@ -118,11 +118,14 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 	 * Opens this RSGuiTab.
 	 */
 	public void open() {
+		if ( this.open )
+			return;
+		
 		this.open = true;
 
 		int x = this.botPanel.getX() + 1;
 		int y = this.botPanel.getY() + 1;
-		this.botPanel.onMousePress(x, y);
+		this.botPanel.onMousePress(-1, -1);
 		this.botPanel.onMouseDown(x, y);
 		this.botPanel.onMouseUpdate(x, y);
 		
@@ -230,10 +233,16 @@ public abstract class RSGuiTab implements RSGuiMouseListener {
 
 
 	public boolean onMousePress(int x, int y) {
+		if ( !this.botPanel.getBounds().contains(x, y) )
+			return false;
+		
 		return this.botPanel.onMousePress(x, y);
 	}
 
 	public void onMouseDown(int x, int y) {
+		if ( !this.botPanel.getBounds().contains(x, y) )
+			return;
+		
 		this.botPanel.onMouseDown(x, y);
 	}
 
