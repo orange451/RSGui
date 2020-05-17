@@ -62,11 +62,6 @@ public abstract class RSGuiFrame extends RSGuiNode {
 		this.opacity = alpha;
 	}
 
-	public void setLocation(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
 	public void setCanClose(boolean b) {
 		this.canClose = b;
 	}

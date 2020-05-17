@@ -46,9 +46,10 @@ public abstract class RSGuiNode {
 		return this.height;
 	}
 
-	public void setLocation(int x, int y) {
+	public RSGuiNode setLocation(int x, int y) {
 		this.x = x;
 		this.y = y;
+		return this;
 	}
 
 	public void setVisible(boolean b) {
