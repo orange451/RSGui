@@ -25,11 +25,11 @@ public class GuiTester extends Script implements Painting, EventBlockingOverride
 		RSGui.initialize();
 		
 		// Add a tab
-		this.gui1 = new TestGui("https://firstrecon.net/public/tribot/iconSword.png");
+		this.gui1 = new TestGui("http://firstrecon.net/public/tribot/iconSword.png");
 		RSGui.addTab(this.gui1);
 		
 		// Add another tab
-		this.gui2 = new TestGui2("https://firstrecon.net/public/tribot/iconGear.png");
+		this.gui2 = new TestGui2("http://firstrecon.net/public/tribot/iconGear.png");
 		this.gui2.setLocation(1);
 		RSGui.addTab(this.gui2);
 
