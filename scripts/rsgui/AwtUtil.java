@@ -14,14 +14,19 @@ import javax.imageio.ImageIO;
 import org.tribot.api.General;
 
 public class AwtUtil {
+	private static final int DEFAULT_IMAGE_SIZE = 4;
+	
+	private static final int DEFAULT_IMAGE_FORMAT = 2;
+	
 	public static BufferedImage getImage(String name) {
 		try {
 			General.println("Loading image: " + name);
-			return ImageIO.read(AwtUtil.class.getClassLoader().getResource(name));
-		} catch (IOException e) {
-			General.println(name + " not loaded. ");
+			URL resource = AwtUtil.class.getClassLoader().getResource(name);
+			return ImageIO.read(resource);
+		} catch (Exception e) {
+			General.println(name + " not loaded. " + e.getMessage());
 		}
-		return null;
+		return createImage(DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_SIZE);
 	}
 
 	public static BufferedImage getImage(URL name) {
@@ -34,11 +39,15 @@ public class AwtUtil {
 		} catch (IOException e) {
 			General.println(name + " not loaded. ");
 		}
-		return null;
+		return createImage(DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_SIZE);
+	}
+	
+	public static BufferedImage createImage(int w, int h) {
+		return new BufferedImage(w, h, DEFAULT_IMAGE_FORMAT);
 	}
 
 	public static BufferedImage getImage(BufferedImage source, int x, int y, int w, int h) {
-		BufferedImage ret = new BufferedImage(w, h, 2);
+		BufferedImage ret = createImage(w, h);
 		Graphics g = ret.getGraphics();
 		g.drawImage(source, -x, -y, null);
 		return ret;
